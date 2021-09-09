@@ -8,6 +8,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Delivery.SelfServiceKioskApi.Concrete.Rkeeper;
 
 
 namespace Delivery.SelfServiceKioskApi.Controllers
@@ -18,10 +19,12 @@ namespace Delivery.SelfServiceKioskApi.Controllers
     {
         readonly DeliveryKioskApiContext _context;
         private DeliveryService _delivery;
+        private RkeeperService _rkeeperService;
 
-        private DeliveryController()
+        public DeliveryController()
         {
             _delivery = new DeliveryService();
+            _rkeeperService = new RkeeperService();
         }
 
         [HttpGet]
