@@ -38,7 +38,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete
             }
         }
 
-        public async Task<string> PostAsync<T>(string method, T bodyParameter, string contentType)
+        public async Task<string> PostAsync<T>(string method, T data, string contentType)
         {
             try
             {
@@ -47,9 +47,9 @@ namespace Delivery.SelfServiceKioskApi.Concrete
                 webRequest.ContentType = contentType;
                 
                 if(contentType == "Application/json")
-                    await WriteJsonBodyAsync(webRequest, bodyParameter);
+                    await WriteJsonBodyAsync(webRequest, data);
                 if (contentType == "form-data")
-                    await WriteFormBodyAsync(webRequest, bodyParameter);
+                    await WriteFormBodyAsync(webRequest, data);
                 
                 var mainResponse = await ReadResponseAsync(webRequest.GetResponse());
                 return mainResponse;
