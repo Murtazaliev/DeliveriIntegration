@@ -16,7 +16,7 @@ using Delivery.SelfServiceKioskApi.Helpers;
 
 namespace Delivery.SelfServiceKioskApi.Concrete.Rkeeper
 {
-    public class RkeeperService : IRkeeper
+    public class RkeeperService : IKiosk
     {
         private const string BaseUrl = "https://delivery.ucs.ru";
 
@@ -27,12 +27,12 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Rkeeper
             _repository = new Repository(BaseUrl);
         }
 
-        public async Task<string> Authorize(string clientSecret, string clientId)
+        public async Task<string> Authorize(string userId, string userSecret)
         {
             string method = "connect/token";
             try
             {
-                var data = new { clientId = clientId, clientSecret = clientSecret};
+                var data = new { clientId = userId, clientSecret = userSecret};
                 var token = await _repository.PostAsync(method, data,ContentTypes.FormData, string.Empty);   
                 return token;
             }
@@ -42,12 +42,12 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Rkeeper
             }
         }
         
-        public async Task<string> GetMenu(string token)
+        public async Task<string> GetNomenclature(Guid? organizationId, string accessToken)
         {
             string method = "menu/view";
             try
             {
-                var result = await _repository.GetAsync(method, token);                
+                var result = await _repository.GetAsync(method, accessToken);                
                 return result;
             }
             catch (Exception e)
@@ -55,5 +55,16 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Rkeeper
                 return "Ошибка выполнения! \n" + e.Message;
             }
         }  
+        
+        public List<OrganizationModel> GetOrganizations(string accessToken, string requestTimeout)
+        {
+            throw new NotImplementedException();
+        }
+        
+
+        public Task<string> AddOrderAsync<T>(Guid? organization_id, string access_token, T root) where T : class
+        {
+            throw new NotImplementedException();
+        }
     }
 }

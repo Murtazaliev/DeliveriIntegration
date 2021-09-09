@@ -25,13 +25,13 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             _repository = new Repository(BaseUrl);
         }
 
-        public async Task<string> Authorize(string user_id, string user_secret)
+        public async Task<string> Authorize(string userId, string userSecret)
         {
             string method = "auth/access_token";
             string token = string.Empty;
             try
             {
-                var data = new {user_id = user_id, user_secret = user_secret};;
+                var data = new {user_id = userId, user_secret = userSecret};;
                 token = await _repository.GetAsync(method, data, ContentTypes.FormData);
                 return token;
             }
@@ -41,14 +41,14 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             }
         }
 
-        public string GetNomenclature(Guid? organization_id, string access_token)
+        public async Task<string> GetNomenclature(Guid? organizationId, string accessToken)
         {
             string RelativeUrl = "nomenclature/";
             string result = string.Empty;
             try
             {
-                var DATA = organization_id + "?access_token=" + access_token.ToString().Replace("\"", "").Replace("\\", "");
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(BaseUrl + RelativeUrl + DATA);
+                var data = organizationId + "?access_token=" + accessToken.ToString().Replace("\"", "").Replace("\\", "");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(BaseUrl + RelativeUrl + data);
                 request.Method = "GET";
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 using (Stream stream = response.GetResponseStream())
@@ -56,10 +56,6 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
                 {
                     result = reader.ReadToEnd();
                 }
-                var preResult = System.Text.Json.JsonSerializer.Deserialize<IikoNomenclatureViewModel>(result);
-
-
-
                 return result;
             }
             catch (Exception e)
@@ -68,7 +64,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             }
         }
 
-        public List<OrganizationModel> GetOrganizations(string access_token, string request_timeout)
+        public List<OrganizationModel> GetOrganizations(string accessToken, string requestTimeout)
         {
             throw new NotImplementedException();
         }
