@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Delivery.SelfServiceKioskApi.Helpers;
 
 namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
 {
@@ -31,7 +32,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             try
             {
                 var data = new {user_id = user_id, user_secret = user_secret};;
-                token = await _repository.GetAsync(method, data);
+                token = await _repository.GetAsync(method, data, ContentTypes.FormData);
                 return token;
             }
             catch (Exception e)
