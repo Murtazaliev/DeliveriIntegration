@@ -12,6 +12,7 @@ using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Delivery.SelfServiceKioskApi.Helpers;
 
 namespace Delivery.SelfServiceKioskApi.Concrete.Rkeeper
 {
@@ -33,7 +34,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Rkeeper
             try
             {
                 var data = new { clientId = clientId, clientSecret = clientSecret};
-                token = await _repository.PostAsync(method, data,"form-data");   
+                token = await _repository.PostAsync(method, data,ContentTypes.FormData, string.Empty);   
                 return token;
             }
             catch (Exception e)
@@ -41,5 +42,20 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Rkeeper
                 return "Ошибка авторизации!";
             }
         }
+        
+        public async Task<string> GetMenu(string token)
+        {
+            string method = "menu/view";
+            string result = string.Empty;
+            try
+            {
+                result = await _repository.GetAsync(method, token);                
+                return result;
+            }
+            catch (Exception e)
+            {
+                return "Ошибка выполнения! \n" + e.Message;
+            }
+        }  
     }
 }
