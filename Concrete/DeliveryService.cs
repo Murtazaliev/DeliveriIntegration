@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Delivery.SelfServiceKioskApi.Concrete.Rkeeper;
 
 namespace Delivery.SelfServiceKioskApi.Concrete
 {
@@ -95,6 +96,9 @@ namespace Delivery.SelfServiceKioskApi.Concrete
                 {
                     case KioskName.Iiko:
                         _kiosk = new IikoService();
+                        break;
+                    case KioskName.Rkeeper:
+                        _kiosk = new RkeeperService();
                         break;
                     default:
                         _kiosk = new IikoService();
