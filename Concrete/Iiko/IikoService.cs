@@ -43,19 +43,11 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
 
         public async Task<string> GetNomenclature(Guid? organizationId, string accessToken)
         {
-            string RelativeUrl = "nomenclature/";
-            string result = string.Empty;
+            string method = $"nomenclature/{organizationId}?";
             try
             {
-                var data = organizationId + "?access_token=" + accessToken.ToString().Replace("\"", "").Replace("\\", "");
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(BaseUrl + RelativeUrl + data);
-                request.Method = "GET";
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                using (Stream stream = response.GetResponseStream())
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    result = reader.ReadToEnd();
-                }
+                var data = new {access_token= accessToken.ToString().Replace("\"", "").Replace("\\", "")};
+                var result = await _repository.GetAsync(method,data, string.Empty);
                 return result;
             }
             catch (Exception e)
