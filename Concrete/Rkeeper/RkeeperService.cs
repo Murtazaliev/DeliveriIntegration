@@ -30,11 +30,10 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Rkeeper
         public async Task<string> Authorize(string clientSecret, string clientId)
         {
             string method = "connect/token";
-            string token = string.Empty;
             try
             {
                 var data = new { clientId = clientId, clientSecret = clientSecret};
-                token = await _repository.PostAsync(method, data,ContentTypes.FormData, string.Empty);   
+                var token = await _repository.PostAsync(method, data,ContentTypes.FormData, string.Empty);   
                 return token;
             }
             catch (Exception e)
@@ -46,10 +45,9 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Rkeeper
         public async Task<string> GetMenu(string token)
         {
             string method = "menu/view";
-            string result = string.Empty;
             try
             {
-                result = await _repository.GetAsync(method, token);                
+                var result = await _repository.GetAsync(method, token);                
                 return result;
             }
             catch (Exception e)
