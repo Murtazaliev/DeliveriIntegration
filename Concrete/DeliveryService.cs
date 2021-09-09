@@ -25,9 +25,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete
         }
 
         List<Product> Products = new List<Product>();
-
-
-
+        
         /// <summary>
         /// Запись запроса в очередь
         /// </summary>
@@ -104,17 +102,13 @@ namespace Delivery.SelfServiceKioskApi.Concrete
                 }
                 var access_token = JsonConvert.SerializeObject(_kiosk.Authorize(request.Login, request.Password));
                 var response = Task.Run(() => _kiosk.GetNomenclature(request.IdOrganization, access_token)).Result;
-
-
+                
                 var result = Converter(response, request.Description, request.RequestDate, request.AnswerDate ?? DateTime.Now, request.IdOrganization ?? Guid.Empty, request.Code ?? Guid.Empty, request.IdCategory ?? Guid.Empty);
 
                 request.Answer = result;
                 request.AnswerDate = DateTime.Now;
                 request.IsProcessed = true;
                 await _context.SaveChangesAsync();
-
-
-
             }
             Thread.Sleep(500);
         }
@@ -156,7 +150,6 @@ namespace Delivery.SelfServiceKioskApi.Concrete
 
         public async Task<string> AddOrder(CreateOrderRequestData data)
         {
-            
             try
             {
                 switch ((KioskName)data.Kiosk)
