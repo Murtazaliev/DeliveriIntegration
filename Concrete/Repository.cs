@@ -20,11 +20,12 @@ namespace Delivery.SelfServiceKioskApi.Concrete
             _baseUrl = baseUrl;
         }
         
-        public async Task<string> GetAsync(string method)
+        public async Task<string> GetAsync<T>(string method, T data)
         {
             try
             {
-                HttpWebRequest webRequest = WebRequest.CreateHttp(_baseUrl + method);
+                var parameters = ToQueryString(data); 
+                HttpWebRequest webRequest = WebRequest.CreateHttp($"{_baseUrl}{method}?{parameters}");
                 webRequest.Method = "GET";
                 webRequest.ContentType = "Application/json";
                 var mainResponse = await ReadResponseAsync(webRequest.GetResponse());
