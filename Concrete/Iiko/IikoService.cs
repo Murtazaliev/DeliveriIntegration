@@ -17,21 +17,21 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
     public class IikoService : IKiosk
     {
         private readonly string BaseUrl = "https://iiko.biz:9900/api/0/";
-        public string Authorize(string user_id, string user_secret)
+        private Repository _repository;
+
+        public IikoService()
         {
-            string RelativeUrl = "auth/access_token";
+            _repository = new Repository(BaseUrl);
+        }
+
+        public async Task<string> Authorize(string user_id, string user_secret)
+        {
+            string method = "auth/access_token";
             string token = string.Empty;
             try
             {
-                var DATA = "?user_id=" + user_id + "&user_secret=" + user_secret;
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(BaseUrl + RelativeUrl + DATA);
-                request.Method = "GET";
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                using (Stream stream = response.GetResponseStream())
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    token = reader.ReadToEnd();
-                }
+                var data = new {user_id = user_id, user_secret = user_secret};;
+                token = await _repository.GetAsync(method, data);
                 return token;
             }
             catch (Exception e)
