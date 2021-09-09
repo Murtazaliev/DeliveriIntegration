@@ -57,12 +57,12 @@ namespace Delivery.SelfServiceKioskApi.Controllers
         }
         [HttpPost]
         [Route("order")]
-        public string AddOrders(CreateOrderRequestData paramsModel)
+        public async Task<string> AddOrders(CreateOrderRequestData paramsModel)
         {
             HttpResponseMessage httpResponse = new HttpResponseMessage();
             if(paramsModel != null)
             {
-               var response =  _delivery.AddOrder(paramsModel);
+               var response =  await _delivery.AddOrder(paramsModel);
                 httpResponse.StatusCode = HttpStatusCode.OK;
                 return response;
             }

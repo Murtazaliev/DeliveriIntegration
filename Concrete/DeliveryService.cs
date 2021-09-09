@@ -154,7 +154,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete
             }
         }
 
-        public string AddOrder(CreateOrderRequestData data)
+        public async Task<string> AddOrder(CreateOrderRequestData data)
         {
             
             try
@@ -164,14 +164,14 @@ namespace Delivery.SelfServiceKioskApi.Concrete
                     case KioskName.Iiko:
                         _converter = new IikoConverter();
                         _kiosk = new IikoService();
-                        string token = _kiosk.Authorize(data.Login, data.Password);
+                        string token = await _kiosk.Authorize(data.Login, data.Password);
                         var root = _converter.ConverterOrderForKiosk(data);
                         return _kiosk.AddOrderAsync(data.PartnerId, token, root).Result;
 
                     default:
                         _converter = new IikoConverter();
                         _kiosk = new IikoService();
-                        token = _kiosk.Authorize(data.Login, data.Password);
+                        token = await _kiosk.Authorize(data.Login, data.Password);
                         root = _converter.ConverterOrderForKiosk(data);
                         return _kiosk.AddOrderAsync(data.PartnerId, token, root).Result;
                 }
