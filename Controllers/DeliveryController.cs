@@ -16,19 +16,20 @@ namespace Delivery.SelfServiceKioskApi.Controllers
     [ApiController]
     public class DeliveryController : ControllerBase
     {
-
-
-
-
         readonly DeliveryKioskApiContext _context;
-        DeliveryService delivery = new DeliveryService();
+        private DeliveryService _delivery;
+
+        private DeliveryController()
+        {
+            _delivery = new DeliveryService();
+        }
 
         [HttpGet]
         public GetPartnerProductsResponseData Get(Guid code)
         {
             try
             {
-                var result = delivery.GetNomenclature(code);
+                var result = _delivery.GetNomenclature(code);
                 var x = JsonConvert.DeserializeObject<GetPartnerProductsResponseData>(result);
 
                 return x;
@@ -44,7 +45,7 @@ namespace Delivery.SelfServiceKioskApi.Controllers
             HttpResponseMessage httpResponse = new HttpResponseMessage();
             try
             {
-                Task.Run(() => delivery.AddRequest(paramsModel)).Wait();
+                Task.Run(() => _delivery.AddRequest(paramsModel)).Wait();
                 httpResponse.StatusCode = HttpStatusCode.OK;
                 return httpResponse;
             }
@@ -61,7 +62,7 @@ namespace Delivery.SelfServiceKioskApi.Controllers
             HttpResponseMessage httpResponse = new HttpResponseMessage();
             if(paramsModel != null)
             {
-               var response =  delivery.AddOrder(paramsModel);
+               var response =  _delivery.AddOrder(paramsModel);
                 httpResponse.StatusCode = HttpStatusCode.OK;
                 return response;
             }
