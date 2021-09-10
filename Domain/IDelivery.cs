@@ -13,7 +13,7 @@ namespace Delivery.SelfServiceKioskApi.Domain
         Task AddRequest(RequestParamsModel paramsModel);
         Task RequestNomenclature();
         string GetNomenclature(Guid code);
-        string AddOrder(CreateOrderRequestData data);
+        Task<string> AddOrder(CreateOrderRequestData data);
 
     }
 }

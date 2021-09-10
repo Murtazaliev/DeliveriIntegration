@@ -8,7 +8,7 @@ namespace Delivery.SelfServiceKioskApi.Models.Delivery
     public enum KioskName
     {
         Iiko = 1,
-        RKeeper
+        Rkeeper
     }
     public class RequestParamsModel
     {

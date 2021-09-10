@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Delivery.SelfServiceKioskApi.Concrete.Rkeeper;
 
 namespace Delivery.SelfServiceKioskApi.Concrete
 {
@@ -25,9 +26,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete
         }
 
         List<Product> Products = new List<Product>();
-
-
-
+        
         /// <summary>
         /// Запись запроса в очередь
         /// </summary>
@@ -98,23 +97,22 @@ namespace Delivery.SelfServiceKioskApi.Concrete
                     case KioskName.Iiko:
                         _kiosk = new IikoService();
                         break;
+                    case KioskName.Rkeeper:
+                        _kiosk = new RkeeperService();
+                        break;
                     default:
                         _kiosk = new IikoService();
                         break;
                 }
                 var access_token = JsonConvert.SerializeObject(_kiosk.Authorize(request.Login, request.Password));
                 var response = Task.Run(() => _kiosk.GetNomenclature(request.IdOrganization, access_token)).Result;
-
-
+                
                 var result = Converter(response, request.Description, request.RequestDate, request.AnswerDate ?? DateTime.Now, request.IdOrganization ?? Guid.Empty, request.Code ?? Guid.Empty, request.IdCategory ?? Guid.Empty);
 
                 request.Answer = result;
                 request.AnswerDate = DateTime.Now;
                 request.IsProcessed = true;
                 await _context.SaveChangesAsync();
-
-
-
             }
             Thread.Sleep(500);
         }
@@ -154,9 +152,8 @@ namespace Delivery.SelfServiceKioskApi.Concrete
             }
         }
 
-        public string AddOrder(CreateOrderRequestData data)
+        public async Task<string> AddOrder(CreateOrderRequestData data)
         {
-            
             try
             {
                 switch ((KioskName)data.Kiosk)
@@ -164,14 +161,14 @@ namespace Delivery.SelfServiceKioskApi.Concrete
                     case KioskName.Iiko:
                         _converter = new IikoConverter();
                         _kiosk = new IikoService();
-                        string token = _kiosk.Authorize(data.Login, data.Password);
+                        string token = await _kiosk.Authorize(data.Login, data.Password);
                         var root = _converter.ConverterOrderForKiosk(data);
                         return _kiosk.AddOrderAsync(data.PartnerId, token, root).Result;
 
                     default:
                         _converter = new IikoConverter();
                         _kiosk = new IikoService();
-                        token = _kiosk.Authorize(data.Login, data.Password);
+                        token = await _kiosk.Authorize(data.Login, data.Password);
                         root = _converter.ConverterOrderForKiosk(data);
                         return _kiosk.AddOrderAsync(data.PartnerId, token, root).Result;
                 }

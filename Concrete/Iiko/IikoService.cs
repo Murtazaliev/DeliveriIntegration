@@ -11,27 +11,28 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Delivery.SelfServiceKioskApi.Helpers;
 
 namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
 {
     public class IikoService : IKiosk
     {
         private readonly string BaseUrl = "https://iiko.biz:9900/api/0/";
-        public string Authorize(string user_id, string user_secret)
+        private Repository _repository;
+
+        public IikoService()
         {
-            string RelativeUrl = "auth/access_token";
+            _repository = new Repository(BaseUrl);
+        }
+
+        public async Task<string> Authorize(string userId, string userSecret)
+        {
+            string method = "auth/access_token";
             string token = string.Empty;
             try
             {
-                var DATA = "?user_id=" + user_id + "&user_secret=" + user_secret;
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(BaseUrl + RelativeUrl + DATA);
-                request.Method = "GET";
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                using (Stream stream = response.GetResponseStream())
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    token = reader.ReadToEnd();
-                }
+                var data = new {user_id = userId, user_secret = userSecret};;
+                token = await _repository.GetAsync(method, data, ContentTypes.FormData);
                 return token;
             }
             catch (Exception e)
@@ -40,25 +41,13 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             }
         }
 
-        public string GetNomenclature(Guid? organization_id, string access_token)
+        public async Task<string> GetNomenclature(Guid? organizationId, string accessToken)
         {
-            string RelativeUrl = "nomenclature/";
-            string result = string.Empty;
+            string method = $"nomenclature/{organizationId}?";
             try
             {
-                var DATA = organization_id + "?access_token=" + access_token.ToString().Replace("\"", "").Replace("\\", "");
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(BaseUrl + RelativeUrl + DATA);
-                request.Method = "GET";
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                using (Stream stream = response.GetResponseStream())
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    result = reader.ReadToEnd();
-                }
-                var preResult = System.Text.Json.JsonSerializer.Deserialize<IikoNomenclatureViewModel>(result);
-
-
-
+                var data = new {access_token= accessToken};
+                var result = await _repository.GetAsync(method,data, string.Empty);
                 return result;
             }
             catch (Exception e)
@@ -67,7 +56,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             }
         }
 
-        public List<OrganizationModel> GetOrganizations(string access_token, string request_timeout)
+        public List<OrganizationModel> GetOrganizations(string accessToken, string requestTimeout)
         {
             throw new NotImplementedException();
         }
