@@ -46,7 +46,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             string method = $"nomenclature/{organizationId}?";
             try
             {
-                var data = new {access_token= accessToken.ToString().Replace("\"", "").Replace("\\", "")};
+                var data = new {access_token= accessToken};
                 var result = await _repository.GetAsync(method,data, string.Empty);
                 return result;
             }
