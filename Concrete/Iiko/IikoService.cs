@@ -32,7 +32,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             try
             {
                 var data = new {user_id = userId, user_secret = userSecret};;
-                token = await _repository.GetAsync(method, data, ContentTypes.FormData);
+                token = await _repository.GetAsync(method, data, String.Empty);
                 return token;
             }
             catch (Exception e)
