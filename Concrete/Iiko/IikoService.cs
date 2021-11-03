@@ -69,7 +69,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
 
                 var data = new StringContent(json, Encoding.UTF8, "application/json");
 
-                string RelativeUrl = String.Format("orders/add?access_token={0}&requestTimeout=00:02:00", access_token);
+                string RelativeUrl = String.Format(BaseUrl + "orders/add?access_token={0}&requestTimeout=00:02:00", access_token);
 
                 using var client = new HttpClient();
 
