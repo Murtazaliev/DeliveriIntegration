@@ -85,9 +85,14 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
         {
             Root root = new Root();
             root.organization = data.PartnerId.ToString();
-            root.customer = new Models.Iiko.Order.Customer { id = data.customer.Id.ToString(), name = data.customer.Name, phone = data.customer.Phonenumber };
+            root.customer = new Models.Iiko.Order.Customer
+            { 
+                id = data.customer.Id.ToString(),
+                name = data.customer.Name, 
+                phone = data.customer.Phonenumber
+            };
             root.order = new IikoOrder {
-                date = DateTime.Now.ToString(),
+                date = data.order.CreateDatetime.ToString("yyyy-MM-dd HH:mm:ss"),
                 id = Guid.NewGuid().ToString(),
                 isSelfService = "false",
                 phone = data.customer.Phonenumber

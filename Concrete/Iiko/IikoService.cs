@@ -61,13 +61,11 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             throw new NotImplementedException();
         }
 
-        public async Task<string> AddOrderAsync<T>(Guid? organization_id, string access_token, T root) where T : class
+        public async Task<string> AddOrderAsync(Guid? organization_id, string access_token, string root)
         {
             try
             {
-                var json = JsonConvert.SerializeObject(root);
-
-                var data = new StringContent(json, Encoding.UTF8, "application/json");
+                var data = new StringContent(root, Encoding.UTF8, "application/json");
 
                 string RelativeUrl = String.Format(BaseUrl + "orders/add?access_token={0}&requestTimeout=00:02:00", access_token.Trim('"'));
 

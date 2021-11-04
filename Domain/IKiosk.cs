@@ -13,7 +13,7 @@ namespace Delivery.SelfServiceKioskApi.Domain
         public Task<string> Authorize(string userId, string userSecret);
         public List<OrganizationModel> GetOrganizations(string accessToken, string requestTimeout);
         public Task<string> GetNomenclature(Guid? organizationId, string accessToken);
-        public Task<string> AddOrderAsync<T>(Guid? organization_id, string access_token, T root) where T : class;
+        public Task<string> AddOrderAsync(Guid? organization_id, string access_token, string root);
 
     }
 }
