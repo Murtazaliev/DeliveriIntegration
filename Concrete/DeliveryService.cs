@@ -26,7 +26,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete
         }
 
         List<Product> Products = new List<Product>();
-        
+
         /// <summary>
         /// Запись запроса в очередь
         /// </summary>
@@ -106,7 +106,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete
                 }
                 var access_token = JsonConvert.SerializeObject(_kiosk.Authorize(request.Login, request.Password));
                 var response = Task.Run(() => _kiosk.GetNomenclature(request.IdOrganization, access_token)).Result;
-                
+
                 var result = Converter(response, request.Description, request.RequestDate, request.AnswerDate ?? DateTime.Now, request.IdOrganization ?? Guid.Empty, request.Code ?? Guid.Empty, request.IdCategory ?? Guid.Empty);
 
                 request.Answer = result;
@@ -154,28 +154,21 @@ namespace Delivery.SelfServiceKioskApi.Concrete
 
         public async Task<string> AddOrder(CreateOrderRequestData data)
         {
-            try
+            switch ((KioskName)data.Kiosk)
             {
-                switch ((KioskName)data.Kiosk)
-                {
-                    case KioskName.Iiko:
-                        _converter = new IikoConverter();
-                        _kiosk = new IikoService();
-                        string token = await _kiosk.Authorize(data.Login, data.Password);
-                        var root = _converter.ConverterOrderForKiosk(data);
-                        return _kiosk.AddOrderAsync(data.PartnerId, token, root).Result;
+                case KioskName.Iiko:
+                    _converter = new IikoConverter();
+                    _kiosk = new IikoService();
+                    string token = await _kiosk.Authorize(data.Login, data.Password);
+                    var root = _converter.ConverterOrderForKiosk(data);
+                    return _kiosk.AddOrderAsync(data.PartnerId, token, root).Result;
 
-                    default:
-                        _converter = new IikoConverter();
-                        _kiosk = new IikoService();
-                        token = await _kiosk.Authorize(data.Login, data.Password);
-                        root = _converter.ConverterOrderForKiosk(data);
-                        return _kiosk.AddOrderAsync(data.PartnerId, token, root).Result;
-                }
-            }
-            catch (Exception e)
-            {
-                return e.Message;
+                default:
+                    _converter = new IikoConverter();
+                    _kiosk = new IikoService();
+                    token = await _kiosk.Authorize(data.Login, data.Password);
+                    root = _converter.ConverterOrderForKiosk(data);
+                    return _kiosk.AddOrderAsync(data.PartnerId, token, root).Result;
             }
         }
     }
