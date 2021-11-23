@@ -28,6 +28,7 @@ namespace Delivery.SelfServiceKioskApi.Controllers
         }
 
         [HttpGet]
+        [Route("get")]
         public GetPartnerProductsResponseData Get(Guid code)
         {
             try
@@ -42,7 +43,9 @@ namespace Delivery.SelfServiceKioskApi.Controllers
                 return null;
             }
         }
+
         [HttpPost]
+        [Route("nomenclature")]
         public HttpResponseMessage Nomenclature(RequestParamsModel paramsModel)
         {
             HttpResponseMessage httpResponse = new HttpResponseMessage();
@@ -60,20 +63,23 @@ namespace Delivery.SelfServiceKioskApi.Controllers
         }
         [HttpPost]
         [Route("order")]
-        public async Task<string> AddOrders(CreateOrderRequestData paramsModel)
+        public async Task<IActionResult> AddOrders(CreateOrderRequestData paramsModel)
         {
             HttpResponseMessage httpResponse = new HttpResponseMessage();
-            if(paramsModel != null)
+            try
             {
-               var response =  await _delivery.AddOrder(paramsModel);
-                httpResponse.StatusCode = HttpStatusCode.OK;
-                return response;
+                if (paramsModel != null)
+                {
+                    var response = await _delivery.AddOrder(paramsModel);
+                    return Ok(response);
+                }
             }
-            else
+            catch (Exception e)
             {
-                httpResponse.StatusCode = HttpStatusCode.BadRequest;
-                return httpResponse.ToString();
+                return BadRequest(e.Message);
             }
+            httpResponse.StatusCode = HttpStatusCode.BadRequest;
+            return BadRequest(httpResponse.ToString());
         }
     }
 }
