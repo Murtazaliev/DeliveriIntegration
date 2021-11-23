@@ -26,7 +26,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
 
 
                 //TODO Изменить Take(10)
-                foreach (var item in data.groups)
+                foreach (var item in data.groups.ToList())
                 {
                     images = item.images;
                     imgUrl = item.images.Count != 0 ? item.images[0].imageUrl : "";
@@ -51,8 +51,36 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
                             Id = subItem.id,
                             Img = imgUrl,
                             Name = subItem.name,
-                            PortionSize = subItem.weight.ToString()
+                            PortionSize = subItem.weight.ToString(),
                         };
+                        if(partnerId == Guid.Parse("c908200d-345f-11e9-80e8-d8d38565926f")) // Модификаторы в номенклатуре павлонии
+                        {
+                            product.RequiredAdditiveGroups = subItem.groupModifiers.Select(additiveGroup =>
+                            {
+                                if (additiveGroup.required != true || additiveGroup.modifierId == null)
+                                    return null;
+
+                                var group = data.groups.FirstOrDefault(x => x.id == additiveGroup.modifierId.ToString());
+                                var requiredAdditiveGroup = new RequiredAdditiveGroup();
+                                requiredAdditiveGroup.Id = Guid.NewGuid();
+                                requiredAdditiveGroup.ModifierId = additiveGroup.modifierId ?? Guid.Empty;
+                                requiredAdditiveGroup.Name = group.name;
+                                requiredAdditiveGroup.Additives = additiveGroup.childModifiers.Select(additiveProduct =>
+                                {
+                                    var product = data.products.FirstOrDefault(n => n.id == additiveProduct.modifierId);
+
+                                    var additive = new Additive();
+                                    additive.Id = Guid.NewGuid();
+                                    additive.ModifierId = additiveProduct.modifierId??Guid.Empty;
+                                    additive.Cost = Convert.ToDecimal(product.price);
+                                    additive.Name = product.name;
+
+                                    return additive;
+                                }).ToList();
+
+                                return requiredAdditiveGroup;
+                            }).ToList();
+                        }
                         group.Products.Add(product);
                     }
                     nomenclature.Add(group);
@@ -108,7 +136,13 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             root.order.items = new List<Item>();
             foreach (var item in data.OrderItems)
             {
-                root.order.items.Add(new Item { amount = item.Amount, id = item.Id.ToString(), name = item.Name, sum = item.Sum });
+                root.order.items.Add(new Item 
+                { 
+                    amount = item.Amount,
+                    id = item.Id.ToString(),
+                    name = item.Name,
+                    sum = item.Sum
+                });
             }
             return JsonConvert.SerializeObject(root);
         }

@@ -18,22 +18,21 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
     public class IikoService : IKiosk
     {
         private readonly string BaseUrl = "https://iiko.biz:9900/api/0/";
-        private Repository _repository;
 
         public IikoService()
         {
-            _repository = new Repository(BaseUrl);
+            
         }
 
         public async Task<string> Authorize(string userId, string userSecret)
         {
-            string method = "auth/access_token";
+            string relativeUrl = $"auth/access_token?user_id={userId}&user_secret={userSecret}";
             string token = string.Empty;
             try
             {
-                var data = new {user_id = userId, user_secret = userSecret};;
-                token = await _repository.GetAsync(method, data, String.Empty);
-                return token;
+                using var client = new HttpClient();
+                var response = await client.GetAsync(relativeUrl);
+                return await response.Content.ReadAsStringAsync();
             }
             catch (Exception e)
             {
@@ -43,12 +42,12 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
 
         public async Task<string> GetNomenclature(Guid? organizationId, string accessToken)
         {
-            string method = $"nomenclature/{organizationId}?";
+            string relativeUrl = $"nomenclature/{organizationId}?access_token={accessToken}";
             try
             {
-                var data = new {access_token= accessToken};
-                var result = await _repository.GetAsync(method,data, string.Empty);
-                return result;
+                var client = new HttpClient();
+                var response = await client.GetAsync(relativeUrl);
+                return await response.Content.ReadAsStringAsync();
             }
             catch (Exception e)
             {
@@ -63,24 +62,20 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
 
         public async Task<string> AddOrderAsync(Guid? organization_id, string access_token, string root)
         {
-            try
-            {
-                var data = new StringContent(root, Encoding.UTF8, "application/json");
+            var data = new StringContent(root, Encoding.UTF8, "application/json");
 
-                string RelativeUrl = String.Format(BaseUrl + "orders/add?access_token={0}&requestTimeout=00:02:00", access_token.Trim('"'));
+            string RelativeUrl = String.Format(BaseUrl + "orders/add?access_token={0}&requestTimeout=00:02:00", access_token.Trim('"'));
 
-                using var client = new HttpClient();
+            using var client = new HttpClient();
 
-                var response = await client.PostAsync(RelativeUrl, data);
+            var response = await client.PostAsync(RelativeUrl, data);
 
-                string result = response.Content.ReadAsStringAsync().Result;
+            string result = response.Content.ReadAsStringAsync().Result;
 
-                return result;
-            }
-            catch (Exception e)
-            {
-                return "Ошибка выполнения! \n" + e.Message;
-            }
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception(result);
+
+            return result;
         }
     }
 }
