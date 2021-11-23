@@ -8,6 +8,7 @@ namespace Delivery.SelfServiceKioskApi.Models.Delivery
     public class Additive
     {
         public Guid Id { get; set; }
+        public Guid ModifierId { get; set; }
         public string Name { get; set; }
         public decimal Cost { get; set; }
     }

@@ -8,6 +8,7 @@ namespace Delivery.SelfServiceKioskApi.Models.Delivery
     public class RequiredAdditiveGroup
 	{
 		public Guid Id { get; set; }
+		public Guid ModifierId { get; set; }
 		public string Name { get; set; }
 		public List<Additive> Additives { get; set; }
 	}

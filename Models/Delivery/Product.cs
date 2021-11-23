@@ -13,7 +13,7 @@ namespace Delivery.SelfServiceKioskApi.Models.Delivery
 		public string Img { get; set; }
 		public string Description { get; set; }
 		public string PortionSize { get; set; }//?********
-		//public List<Additive> Additives { get; set; }
-		//public List<RequiredAdditiveGroup> RequiredAdditiveGroups { get; set; }		
+		public List<Additive> Additives { get; set; }
+		public List<RequiredAdditiveGroup> RequiredAdditiveGroups { get; set; }		
 	}
 }
