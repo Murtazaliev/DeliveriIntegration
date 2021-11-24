@@ -15,6 +15,6 @@ namespace Delivery.SelfServiceKioskApi.Models.Delivery
 		public string PortionSize { get; set; }//?********
 		public bool IsVisible { get; set; }
 		public List<Additive> Additives { get; set; }
-		public List<RequiredAdditiveGroup> RequiredAdditiveGroups { get; set; }		
-	}
+        public List<RequiredAdditiveGroup> RequiredAdditiveGroups { get; set; } = new List<RequiredAdditiveGroup>();
+    }
 }
