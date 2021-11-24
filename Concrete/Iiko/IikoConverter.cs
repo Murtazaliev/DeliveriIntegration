@@ -14,14 +14,14 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
     {
         List<ProductCategory> Categories = new List<ProductCategory>();
 
-        public override string ConverterResponseNomenclatureData<T>(T entity, DateTime createRequestDate, DateTime createResponseDate, Guid partnerId, Guid requestId, Guid categoryId)
+        public override string ConverterResponseNomenclatureData<T>(T entity, DateTime createRequestDate, DateTime createResponseDate, Guid partnerId,
+            Guid requestId, Guid categoryId)
         {
             var data = entity as IikoNomenclatureViewModel;
             List<Models.Iiko.Images> images = new List<Models.Iiko.Images>();
             string imgUrl;
             try
             {
-
                 List<ProductCategory> nomenclature = new List<ProductCategory>();
 
 
@@ -40,51 +40,50 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
                     };
                     for (int i = 0; i < data.products.Where(x => x.parentGroup == item.id).Count(); i++)
                     {
-
                         var subItem = data.products.Where(x => x.parentGroup == item.id).ToList()[i];
 
                         imgUrl = subItem.images.Count != 0 ? subItem.images[0].imageUrl : "";
                         Product product = new Product()
                         {
-                            Cost = (decimal)subItem.price,
+                            Cost = (decimal) subItem.price,
                             Description = subItem.description != "" ? subItem.description : null,
                             Id = subItem.id,
                             Img = imgUrl,
                             Name = subItem.name,
                             PortionSize = subItem.weight.ToString(),
                         };
-                        if(partnerId == Guid.Parse("c908200d-345f-11e9-80e8-d8d38565926f")) // Модификаторы в номенклатуре павлонии
+                        if (partnerId == Guid.Parse("c908200d-345f-11e9-80e8-d8d38565926f")) // Модификаторы в номенклатуре павлонии
                         {
-                            product.RequiredAdditiveGroups = subItem.groupModifiers.Select(additiveGroup =>
+                            foreach (var additiveGroup in subItem.groupModifiers.ToList())
                             {
-                                if (additiveGroup.required != true || additiveGroup.modifierId == null)
-                                    return null;
+                                if (additiveGroup.modifierId == null)
+                                    continue;
 
-                                var group = data.groups.FirstOrDefault(x => x.id == additiveGroup.modifierId.ToString());
+                                var groupToAdd = data.groups.FirstOrDefault(x => x.id == additiveGroup.modifierId.ToString());
                                 var requiredAdditiveGroup = new RequiredAdditiveGroup();
                                 requiredAdditiveGroup.Id = Guid.NewGuid();
                                 requiredAdditiveGroup.ModifierId = additiveGroup.modifierId ?? Guid.Empty;
-                                requiredAdditiveGroup.Name = group.name;
+                                requiredAdditiveGroup.Name = groupToAdd.name;
                                 requiredAdditiveGroup.Additives = additiveGroup.childModifiers.Select(additiveProduct =>
                                 {
                                     var product = data.products.FirstOrDefault(n => n.id == additiveProduct.modifierId);
 
                                     var additive = new Additive();
                                     additive.Id = Guid.NewGuid();
-                                    additive.ModifierId = additiveProduct.modifierId??Guid.Empty;
+                                    additive.ModifierId = additiveProduct.modifierId ?? Guid.Empty;
                                     additive.Cost = Convert.ToDecimal(product.price);
                                     additive.Name = product.name;
 
                                     return additive;
                                 }).ToList();
-
-                                return requiredAdditiveGroup;
-                            }).ToList();
+                                product.RequiredAdditiveGroups.Add(requiredAdditiveGroup);
+                            }
                         }
                         group.Products.Add(product);
                     }
                     nomenclature.Add(group);
                 }
+
                 GetPartnerProductsResponseData responseData = new GetPartnerProductsResponseData()
                 {
                     CreateRequestDate = createRequestDate,
@@ -100,6 +99,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
                     ResponseModel(responseData, categoryId);
                     responseData.ProductCategories = Categories;
                 }
+
                 return JsonConvert.SerializeObject(responseData);
             }
             catch (Exception e)
@@ -114,24 +114,27 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             Root root = new Root();
             root.organization = data.PartnerId.ToString();
             root.customer = new Models.Iiko.Order.Customer
-            { 
+            {
                 id = data.customer.Id.ToString(),
-                name = data.customer.Name, 
+                name = data.customer.Name,
                 phone = data.customer.Phonenumber
             };
-            root.order = new IikoOrder {
+            root.order = new IikoOrder
+            {
                 date = data.order.CreateDatetime.ToString("yyyy-MM-dd HH:mm:ss"),
                 id = Guid.NewGuid().ToString(),
                 isSelfService = "false",
                 phone = data.customer.Phonenumber
             };
 
-            root.order.address = new Address { 
-                apartment = data.DeliveryLocation.Apartment, 
+            root.order.address = new Address
+            {
+                apartment = data.DeliveryLocation.Apartment,
                 city = data.DeliveryLocation.City,
-                home = data.DeliveryLocation.Home, 
-                street = data.DeliveryLocation.Street, 
-                comment = data.DeliveryLocation.Comment };
+                home = data.DeliveryLocation.Home,
+                street = data.DeliveryLocation.Street,
+                comment = data.DeliveryLocation.Comment
+            };
 
             root.order.items = new List<Item>();
             foreach (var item in data.OrderItems)
