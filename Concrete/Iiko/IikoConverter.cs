@@ -40,8 +40,9 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
                     };
                     for (int i = 0; i < data.products.Where(x => x.parentGroup == item.id).Count(); i++)
                     {
-
                         var subItem = data.products.Where(x => x.parentGroup == item.id).ToList()[i];
+                        if(subItem.type == "modifier")
+                            continue;
 
                         imgUrl = subItem.images.Count != 0 ? subItem.images[0].imageUrl : "";
                         Product product = new Product()
@@ -51,6 +52,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
                             Id = subItem.id,
                             Img = imgUrl,
                             Name = subItem.name,
+                            IsVisible = (!subItem.isDeleted)??false,
                             PortionSize = subItem.weight.ToString(),
                         };
                         if(partnerId == Guid.Parse("c908200d-345f-11e9-80e8-d8d38565926f")) // Модификаторы в номенклатуре павлонии
