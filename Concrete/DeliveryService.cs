@@ -104,7 +104,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete
                         _kiosk = new IikoService();
                         break;
                 }
-                var access_token = JsonConvert.SerializeObject(_kiosk.Authorize(request.Login, request.Password));
+                var access_token = await _kiosk.Authorize(request.Login, request.Password);
                 var response = Task.Run(() => _kiosk.GetNomenclature(request.IdOrganization, access_token)).Result;
 
                 var result = Converter(response, request.Description, request.RequestDate, request.AnswerDate ?? DateTime.Now, request.IdOrganization ?? Guid.Empty, request.Code ?? Guid.Empty, request.IdCategory ?? Guid.Empty);

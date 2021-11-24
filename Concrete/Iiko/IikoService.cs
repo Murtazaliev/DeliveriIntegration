@@ -31,7 +31,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             try
             {
                 using var client = new HttpClient();
-                var response = await client.GetAsync(relativeUrl);
+                var response = await client.GetAsync(BaseUrl + relativeUrl);
                 return await response.Content.ReadAsStringAsync();
             }
             catch (Exception e)
@@ -42,11 +42,11 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
 
         public async Task<string> GetNomenclature(Guid? organizationId, string accessToken)
         {
-            string relativeUrl = $"nomenclature/{organizationId}?access_token={accessToken}";
+            string relativeUrl = $"nomenclature/{organizationId}?access_token={accessToken.Trim('"')}";
             try
             {
                 var client = new HttpClient();
-                var response = await client.GetAsync(relativeUrl);
+                var response = await client.GetAsync(BaseUrl + relativeUrl);
                 return await response.Content.ReadAsStringAsync();
             }
             catch (Exception e)
