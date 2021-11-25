@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 
 namespace Delivery.SelfServiceKioskApi.Models.Iiko.Order
 {
-    public class Item
+    public class Modifier
     {
         public string id { get; set; }
         public string name { get; set; }
         public int amount { get; set; }
-        public string code { get; set; }
-        public decimal sum { get; set; }
-        public List<Modifier> modifiers { get; set; }
+        public string groupId { get; set; }
+        public string groupName { get; set; }
     }
 }

@@ -142,13 +142,17 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             root.order.items = new List<Item>();
             foreach (var item in data.OrderItems)
             {
-                root.order.items.Add(new Item 
-                { 
+                var product = new Item
+                {
                     amount = item.Amount,
                     id = item.Id.ToString(),
                     name = item.Name,
-                    sum = item.Sum
-                });
+                    sum = item.Sum,
+                };
+
+                if (item.Additives.Count > 0)
+                    product.modifiers = item.Additives;
+                root.order.items.Add(product);
             }
             return JsonConvert.SerializeObject(root);
         }
