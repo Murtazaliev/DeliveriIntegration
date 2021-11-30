@@ -54,8 +54,13 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Rkeeper
             {
                 return "Ошибка выполнения! \n" + e.Message;
             }
-        }  
-        
+        }
+
+        public Task<string> AddOrderAsync(Guid? organization_id, string access_token, string root)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<OrganizationModel> GetOrganizations(string accessToken, string requestTimeout)
         {
             throw new NotImplementedException();
