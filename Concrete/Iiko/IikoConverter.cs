@@ -154,6 +154,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
                     product.modifiers = item.Additives;
                 root.order.items.Add(product);
             }
+            root.PaymentItems.AddRange(data.PaymentItems);
             return JsonConvert.SerializeObject(root);
         }
     }
