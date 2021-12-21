@@ -5,7 +5,7 @@ namespace Delivery.SelfServiceKioskApi.Models.Delivery.Order
     public class PaymentItem
     {
         [JsonProperty("sum")]
-        public int Sum { get; set; }
+        public decimal Sum { get; set; }
 
         [JsonProperty("paymentType")]
         public PaymentType PaymentType { get; set; }
