@@ -1,4 +1,5 @@
 ﻿using Delivery.SelfServiceKioskApi.Models.Delivery.Order;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace Delivery.SelfServiceKioskApi.Models.Iiko.Order
         public string organization { get; set; }
         public Customer customer { get; set; }
         public IikoOrder order { get; set; }
-        public List<PaymentItem> PaymentItems { get; set; } = new List<PaymentItem>();
+
+        [JsonProperty("paymentItems")]
+        public List<PaymentItem> paymentItems { get; set; } = new List<PaymentItem>();
     }
 }
