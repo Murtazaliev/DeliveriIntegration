@@ -8,6 +8,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Delivery.SelfServiceKioskApi.Concrete.GreenApple;
 using Delivery.SelfServiceKioskApi.Concrete.Rkeeper;
 using Delivery.SelfServiceKioskApi.Models.GreenApple;
 
@@ -17,20 +18,43 @@ namespace Delivery.SelfServiceKioskApi.Controllers
     [ApiController]
     public class IntegrationController : ControllerBase
     {
-        readonly DeliveryKioskApiContext _context;
+        private readonly DeliveryKioskApiContext _dbContext;
         private readonly GreenAppleService _appleService;
 
-        public IntegrationController()
+        public IntegrationController(DeliveryKioskApiContext dbContext)
         {
-
+            _dbContext = dbContext;
+            _appleService = new GreenAppleService(dbContext);
         }
 
         [HttpPost]
         [Route("sendNomenclature")]
-        public async Task<IActionResult> SendNomenclature([FromForm]NomenclatureRequestData model)
+        public async Task<IActionResult> SendNomenclatureAsync([FromForm]NomenclatureRequestData model)
         {
-            
-            return BadRequest();
+            try
+            {
+                await _appleService.SaveNomenclature(model);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+            return Ok();
+        }
+        
+        [HttpGet]
+        [Route("getNomenclature")]
+        public IActionResult GetNomenclature()
+        {
+            try
+            {
+                return Ok(_appleService.GetNomenclature());
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }

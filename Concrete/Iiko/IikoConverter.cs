@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Delivery.SelfServiceKioskApi.Helpers;
 
 namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
 {
@@ -55,7 +56,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
                             IsVisible = (!subItem.isDeleted)??false,
                             PortionSize = subItem.weight.ToString(),
                         };
-                        if (partnerId == Guid.Parse("c908200d-345f-11e9-80e8-d8d38565926f")) // Модификаторы в номенклатуре павлонии
+                        if (partnerId == Organisations.PaulowniaId) // Модификаторы в номенклатуре павлонии
                         {
                             foreach (var additiveGroup in subItem.groupModifiers.ToList())
                             {

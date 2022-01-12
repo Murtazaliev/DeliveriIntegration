@@ -18,10 +18,10 @@ namespace Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels
         public string ExternalId { get; set; }
 
         [JsonProperty("cost")]
-        public int Cost { get; set; }
+        public decimal Cost { get; set; }
 
         [JsonProperty("oldPrice")]
-        public int OldPrice { get; set; }
+        public decimal OldPrice { get; set; }
 
         [JsonProperty("hidden")]
         public bool Hidden { get; set; }

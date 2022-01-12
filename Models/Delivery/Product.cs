@@ -8,7 +8,9 @@ namespace Delivery.SelfServiceKioskApi.Models.Delivery
     public class Product
     {
 		public Guid Id { get; set; }
-		public string Name { get; set; }
+        public string ExternalId { get; set; }
+        public string ExternalCategoryId { get; set; }
+        public string Name { get; set; }
 		public decimal Cost { get; set; } //?********
 		public string Img { get; set; }
 		public string Description { get; set; }
