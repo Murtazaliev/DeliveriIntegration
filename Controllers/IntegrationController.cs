@@ -1,16 +1,11 @@
-﻿using Delivery.SelfServiceKioskApi.Concrete;
-using Delivery.SelfServiceKioskApi.DbModel;
-using Delivery.SelfServiceKioskApi.Models.Delivery;
-using Delivery.SelfServiceKioskApi.Models.Delivery.Order;
+﻿using Delivery.SelfServiceKioskApi.DbModel;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System;
-using System.Net;
-using System.Net.Http;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Delivery.SelfServiceKioskApi.Concrete.GreenApple;
-using Delivery.SelfServiceKioskApi.Concrete.Rkeeper;
-using Delivery.SelfServiceKioskApi.Models.GreenApple;
+using Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels;
+using Product = Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels.Product;
 
 namespace Delivery.SelfServiceKioskApi.Controllers
 {
@@ -28,12 +23,44 @@ namespace Delivery.SelfServiceKioskApi.Controllers
         }
 
         [HttpPost]
-        [Route("sendNomenclature")]
-        public async Task<IActionResult> SendNomenclatureAsync([FromForm]NomenclatureRequestData model)
+        [Route("sendSections")]
+        public async Task<IActionResult> SendSections([FromBody]List<Section> sections)
         {
             try
             {
-                await _appleService.SaveNomenclature(model);
+                await _appleService.SaveSections(sections);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+            return Ok();
+        }
+        
+        [HttpPost]
+        [Route("sendCategories")]
+        public async Task<IActionResult> SendCategories([FromBody]List<Category> categories)
+        {
+            try
+            {
+                await _appleService.SaveCategories(categories);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+            return Ok();
+        }
+        
+        [HttpPost]
+        [Route("sendProducts")]
+        public async Task<IActionResult> SendProducts([FromBody]List<Product> products)
+        {
+            try
+            {
+                await _appleService.SaveProducts(products);
             }
             catch(Exception ex)
             {
