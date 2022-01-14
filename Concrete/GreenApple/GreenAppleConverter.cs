@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Delivery.SelfServiceKioskApi.Models.GreenApple;
 using Newtonsoft.Json;
 using GreenAppleModels = Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels;
 using DeliveryModels = Delivery.SelfServiceKioskApi.Models.Delivery;
@@ -9,7 +10,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
 {
     public class GreenAppleConverter
     {
-        public async Task<List<DeliveryModels.ProductCategory>> ConvertNomenclatureAsync(string sectionsJson,
+        public async Task<NomenclatureResponseData> ConvertNomenclatureAsync(string sectionsJson,
             string categoriesJson,
             string productsJson)
         {
@@ -18,22 +19,14 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
                 var sections = JsonConvert.DeserializeObject<List<DeliveryModels.ProductCategory>>(sectionsJson);
                 var categories = JsonConvert.DeserializeObject<List<DeliveryModels.ProductCategory>>(categoriesJson);
                 var products = JsonConvert.DeserializeObject<List<DeliveryModels.Product>>(productsJson);
-                
-                List<DeliveryModels.ProductCategory> productCategories = new List<DeliveryModels.ProductCategory>();
-                categories.ForEach(category =>
+
+                var nomenclature = new NomenclatureResponseData()
                 {
-                    productCategories.Add(category);
-                });
-                sections.ForEach(section =>
-                {
-                    productCategories.Add(section);
-                });
-                products.ForEach(product =>
-                {
-                    var category = productCategories.FirstOrDefault(n => n.ExternalId == product.ExternalCategoryId);
-                    category?.Products.Add(product);
-                });
-                return productCategories;
+                    Sections = sections,
+                    ProductCategories = categories,
+                    Products = products
+                };
+                return nomenclature;
             });
         }
 

@@ -102,7 +102,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             if (string.IsNullOrEmpty(sections?.Answer) || string.IsNullOrEmpty(products?.Answer) || string.IsNullOrEmpty(categories?.Answer))
                 throw new Exception("Одна или несколько записей номенклатуры отсутствуют или уже были загружены.");
             
-            var productCategories = await _converter.ConvertNomenclatureAsync(sections.Answer, categories.Answer, products.Answer);
+            var nomenclature = await _converter.ConvertNomenclatureAsync(sections.Answer, categories.Answer, products.Answer);
 
             sections.IsProcessed = true;
             sections.AnswerDate = DateTime.Now;
@@ -115,7 +115,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             products.Answer = String.Empty;
 
             await _dbContext.SaveChangesAsync();
-            var result = JsonConvert.SerializeObject(productCategories);
+            var result = JsonConvert.SerializeObject(nomenclature);
             return result;
         }
     }
