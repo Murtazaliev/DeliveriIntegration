@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Delivery.SelfServiceKioskApi.Concrete.GreenApple;
 using Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Product = Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels.Product;
 
 namespace Delivery.SelfServiceKioskApi.Controllers
@@ -72,15 +74,16 @@ namespace Delivery.SelfServiceKioskApi.Controllers
         
         [HttpGet]
         [Route("getNomenclature")]
-        public IActionResult GetNomenclature()
+        public async Task<IActionResult> GetNomenclature()
         {
             try
             {
-                return Ok(_appleService.GetNomenclature());
+                var nomenclature = await _appleService.GetNomenclature();
+                return Ok(nomenclature);
             }
             catch(Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(JsonConvert.SerializeObject(ex));
             }
         }
     }

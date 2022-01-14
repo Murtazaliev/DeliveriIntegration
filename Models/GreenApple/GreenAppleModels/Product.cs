@@ -1,14 +1,12 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels
 {
     public class Product
     {
         [JsonProperty("name_ru")]
+        [JsonPropertyName("name_ru")]
         public string NameRu { get; set; }
 
         [JsonProperty("externalCategoryId")]
