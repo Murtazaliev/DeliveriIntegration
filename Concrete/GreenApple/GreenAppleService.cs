@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Delivery.SelfServiceKioskApi.DbModel;
 using Delivery.SelfServiceKioskApi.Helpers;
+using Delivery.SelfServiceKioskApi.Models.GreenApple;
 using Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels;
 using Newtonsoft.Json;
 using Product = Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels.Product;
@@ -73,7 +74,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<string> GetNomenclature()
+        public async Task<NomenclatureResponseData> GetNomenclature()
         {
             var sections = _dbContext.QueueRequests
                 .OrderBy(n => n.RequestDate)
@@ -115,8 +116,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             products.Answer = String.Empty;
 
             await _dbContext.SaveChangesAsync();
-            var result = JsonConvert.SerializeObject(nomenclature);
-            return result;
+            return nomenclature;
         }
     }
 }

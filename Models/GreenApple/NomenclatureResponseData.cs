@@ -7,8 +7,8 @@ namespace Delivery.SelfServiceKioskApi.Models.GreenApple
 {
     public class NomenclatureResponseData
     {
-        public List<ProductCategory> Sections { get; set; }
-        public List<ProductCategory> ProductCategories { get; set; }
-        public List<Product> Products { get; set; }
+        public List<NomenclatureCategory> Sections { get; set; }
+        public List<NomenclatureCategory> ProductCategories { get; set; }
+        public List<NomenclatureProduct> Products { get; set; }
     }
 }

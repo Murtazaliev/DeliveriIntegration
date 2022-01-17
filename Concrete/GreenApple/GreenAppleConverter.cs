@@ -16,9 +16,9 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
         {
             return await Task.Run(() =>
             {
-                var sections = JsonConvert.DeserializeObject<List<DeliveryModels.ProductCategory>>(sectionsJson);
-                var categories = JsonConvert.DeserializeObject<List<DeliveryModels.ProductCategory>>(categoriesJson);
-                var products = JsonConvert.DeserializeObject<List<DeliveryModels.Product>>(productsJson);
+                var sections = JsonConvert.DeserializeObject<List<NomenclatureCategory>>(sectionsJson);
+                var categories = JsonConvert.DeserializeObject<List<NomenclatureCategory>>(categoriesJson);
+                var products = JsonConvert.DeserializeObject<List<NomenclatureProduct>>(productsJson);
 
                 var nomenclature = new NomenclatureResponseData()
                 {
@@ -30,18 +30,18 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             });
         }
 
-        public async Task<List<DeliveryModels.ProductCategory>> ConvertSectionsAsync(List<GreenAppleModels.Section> sections)
+        public async Task<List<NomenclatureCategory>> ConvertSectionsAsync(List<GreenAppleModels.Section> sections)
         {
             return await Task.Run(() =>
             {
-                List<DeliveryModels.ProductCategory> productCategories = new List<DeliveryModels.ProductCategory>();
+                List<NomenclatureCategory> productCategories = new List<NomenclatureCategory>();
                 sections.ForEach(section =>
                 {
-                    DeliveryModels.ProductCategory productCategory = new DeliveryModels.ProductCategory()
+                    NomenclatureCategory productCategory = new NomenclatureCategory()
                     {
                         ExternalId = section.ExternalId,
                         CategoryPriority = section.Sort,
-                        Name = section.Name
+                        CategoryName = section.Name
                     };
                     productCategories.Add(productCategory);
                 });
@@ -49,18 +49,18 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             });
         }
         
-        public async Task<List<DeliveryModels.ProductCategory>> ConvertCategoriesAsync(List<GreenAppleModels.Category> categories)
+        public async Task<List<NomenclatureCategory>> ConvertCategoriesAsync(List<GreenAppleModels.Category> categories)
         {
             return await Task.Run(() =>
             {
-                List<DeliveryModels.ProductCategory> productCategories = new List<DeliveryModels.ProductCategory>();
+                List<NomenclatureCategory> productCategories = new List<NomenclatureCategory>();
                 categories.ForEach(category =>
                 {
-                    DeliveryModels.ProductCategory productCategory = new DeliveryModels.ProductCategory()
+                    NomenclatureCategory productCategory = new NomenclatureCategory()
                     {
                         ExternalId = category.ExternalId,
                         CategoryPriority = category.Sort,
-                        Name = category.NameRu,
+                        CategoryName = category.NameRu,
                         ExternalParentId = category.ExternalSectionId
                     };
                     productCategories.Add(productCategory);
@@ -69,19 +69,20 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             });
         }
         
-        public async Task<List<DeliveryModels.Product>> ConvertProductsAsync(List<GreenAppleModels.Product> products)
+        public async Task<List<NomenclatureProduct>> ConvertProductsAsync(List<GreenAppleModels.Product> products)
         {
             return await Task.Run(() =>
             {
-                List<DeliveryModels.Product> deliveryProducts = new List<DeliveryModels.Product>();
+                List<NomenclatureProduct> deliveryProducts = new List<NomenclatureProduct>();
                 products.ForEach(product =>
                 {
-                    DeliveryModels.Product deliveryProduct = new DeliveryModels.Product()
+                    NomenclatureProduct deliveryProduct = new NomenclatureProduct()
                     {
                         ExternalId = product.ExternalId,
                         ExternalCategoryId = product.ExternalCategoryId,
                         Name = product.NameRu,
                         Cost = product.Cost,
+                        OldPrice = product.OldPrice,
                         IsVisible = !product.Hidden,
                     };
                     
