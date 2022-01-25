@@ -89,7 +89,8 @@ namespace Delivery.SelfServiceKioskApi.Concrete
         /// <returns></returns>
         public async Task RequestNomenclature()
         {
-            var request = await _context.QueueRequests?.OrderBy(x => x.RequestDate).FirstOrDefaultAsync(x => x.IsProcessed == false);
+            var request = await _context.QueueRequests?.OrderBy(x => x.RequestDate)
+                .FirstOrDefaultAsync(x => x.IsProcessed == false && x.RequestName == "Запрос номенклатуры");
             if (request != null)
             {
                 switch ((KioskName)request.Description)
@@ -114,7 +115,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete
                 request.IsProcessed = true;
                 await _context.SaveChangesAsync();
             }
-            Thread.Sleep(500);
+            Thread.Sleep(5000);
         }
 
         /// <summary>
