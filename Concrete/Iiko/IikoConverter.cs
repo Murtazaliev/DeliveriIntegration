@@ -157,7 +157,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             }
 
             if(data.PaymentItems != null)
-                root.paymentItems.AddRange(data.PaymentItems);
+                root.order.paymentItems.AddRange(data.PaymentItems);
             return JsonConvert.SerializeObject(root);
         }
     }

@@ -12,8 +12,5 @@ namespace Delivery.SelfServiceKioskApi.Models.Iiko.Order
         public string organization { get; set; }
         public Customer customer { get; set; }
         public IikoOrder order { get; set; }
-
-        [JsonProperty("paymentItems")]
-        public List<PaymentItem> paymentItems { get; set; } = new List<PaymentItem>();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Delivery.SelfServiceKioskApi.Models.Delivery.Order;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,5 +14,6 @@ namespace Delivery.SelfServiceKioskApi.Models.Iiko.Order
         public string isSelfService { get; set; }
         public List<Item> items { get; set; }
         public Address address { get; set; }
+        public List<PaymentItem> paymentItems { get; set; } = new List<PaymentItem>();
     }
 }
