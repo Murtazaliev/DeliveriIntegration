@@ -18,5 +18,6 @@ namespace Delivery.SelfServiceKioskApi.Models.Iiko.Order
         public string marketingSource { get; set; }
         public string marketingSourceId { get; set; }
         public int personsCount { get; set; }
+        public string comment { get; set; }
     }
 }
