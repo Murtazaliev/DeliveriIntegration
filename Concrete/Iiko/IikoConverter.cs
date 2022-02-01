@@ -129,12 +129,17 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
                 id = Guid.NewGuid().ToString(),
                 isSelfService = "false",
                 phone = data.customer.Phonenumber,
-                MarketingSource = data.order.MarketingSource,
-                MarketingSourceId = data.order.MarketingSourceId
+                personsCount = data.order.PersonsCount
             };
 
             if (data.order.PaymentItems != null)
                 root.order.paymentItems.AddRange(data.order.PaymentItems);
+
+            if (!string.IsNullOrEmpty(data.order.MarketingSource))
+            {
+                root.order.marketingSource = data.order.MarketingSource;
+                root.order.marketingSourceId = data.order.MarketingSourceId;
+            }
 
             root.order.address = new Address
             {

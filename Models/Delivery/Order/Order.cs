@@ -15,5 +15,6 @@ namespace Delivery.SelfServiceKioskApi.Models.Delivery.Order
         public List<PaymentItem> PaymentItems { get; set; }
         public string MarketingSource { get; set; }
         public string MarketingSourceId { get; set; }
+        public int PersonsCount { get; set; }
     }
 }
