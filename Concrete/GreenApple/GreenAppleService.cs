@@ -104,16 +104,13 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
                 throw new Exception("Одна или несколько записей номенклатуры отсутствуют или уже были загружены.");
             
             var nomenclature = await _converter.ConvertNomenclatureAsync(sections.Answer, categories.Answer, products.Answer);
-
+/*
             sections.IsProcessed = true;
             sections.AnswerDate = DateTime.Now;
-            sections.Answer = String.Empty;
             categories.IsProcessed = true;
             categories.AnswerDate = DateTime.Now;
-            categories.Answer = String.Empty;
             products.IsProcessed = true;
-            products.AnswerDate = DateTime.Now;
-            products.Answer = String.Empty;
+            products.AnswerDate = DateTime.Now;*/
 
             await _dbContext.SaveChangesAsync();
             return nomenclature;

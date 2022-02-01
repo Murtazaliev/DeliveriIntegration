@@ -128,8 +128,13 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
                 date = data.order.CreateDatetime.ToString("yyyy-MM-dd HH:mm:ss"),
                 id = Guid.NewGuid().ToString(),
                 isSelfService = "false",
-                phone = data.customer.Phonenumber
+                phone = data.customer.Phonenumber,
+                MarketingSource = data.order.MarketingSource,
+                MarketingSourceId = data.order.MarketingSourceId
             };
+
+            if (data.order.PaymentItems != null)
+                root.order.paymentItems.AddRange(data.order.PaymentItems);
 
             root.order.address = new Address
             {
@@ -156,8 +161,6 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
                 root.order.items.Add(product);
             }
 
-            if(data.PaymentItems != null)
-                root.order.paymentItems.AddRange(data.PaymentItems);
             return JsonConvert.SerializeObject(root);
         }
     }

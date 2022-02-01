@@ -12,6 +12,8 @@ namespace Delivery.SelfServiceKioskApi.Models.Delivery.Order
         public DateTime CreateDatetime { get; set; }
         public decimal Sum { get; set; }
         public string Comment { get; set; }
+        public List<PaymentItem> PaymentItems { get; set; }
+        public string MarketingSource { get; set; }
+        public string MarketingSourceId { get; set; }
     }
-
 }

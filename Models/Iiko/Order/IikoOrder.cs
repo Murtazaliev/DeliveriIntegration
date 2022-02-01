@@ -15,5 +15,7 @@ namespace Delivery.SelfServiceKioskApi.Models.Iiko.Order
         public List<Item> items { get; set; }
         public Address address { get; set; }
         public List<PaymentItem> paymentItems { get; set; } = new List<PaymentItem>();
+        public string MarketingSource { get; set; }
+        public string MarketingSourceId { get; set; }
     }
 }

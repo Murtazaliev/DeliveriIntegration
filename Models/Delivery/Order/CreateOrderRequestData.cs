@@ -15,7 +15,6 @@ namespace Delivery.SelfServiceKioskApi.Models.Delivery.Order
 		public Customer customer { get; set; }
 		public Order order { get; set; }
 		public List<OrderItem> OrderItems { get; set; }
-		public List<PaymentItem> PaymentItems { get; set; }
 
 	}
 }
