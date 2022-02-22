@@ -60,7 +60,34 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
 
         public async Task<MalishResponseData> GetNomenclature()
         {
-            return null;
+            var categories = _dbContext.QueueRequests
+                .OrderByDescending(n => n.RequestDate)
+                .FirstOrDefault(n =>
+                    n.IdOrganization == Organisations.MalishId && 
+                    n.RequestDate.Date == DateTime.Today.Date && 
+                    n.IsProcessed == false && 
+                    n.RequestName == MalishFileNames.Kls);
+
+            var products = _dbContext.QueueRequests
+                .OrderByDescending(n => n.RequestDate)
+                .FirstOrDefault(n =>
+                    n.IdOrganization == Organisations.MalishId && 
+                    n.RequestDate.Date == DateTime.Today.Date && 
+                    n.IsProcessed == false && 
+                    n.RequestName == MalishFileNames.Goods);
+
+            if (string.IsNullOrEmpty(products?.Answer) || string.IsNullOrEmpty(categories?.Answer))
+                throw new Exception("Одна или несколько записей номенклатуры отсутствуют или уже были загружены.");
+            
+            var nomenclature = await _converter.ConvertNomenclatureAsync(categories.Answer, products.Answer);
+/*
+            categories.IsProcessed = true;
+            categories.AnswerDate = DateTime.Now;
+            products.IsProcessed = true;
+            products.AnswerDate = DateTime.Now;*/
+
+            await _dbContext.SaveChangesAsync();
+            return nomenclature;
         }
     }
 }

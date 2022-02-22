@@ -12,7 +12,18 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
     {
         public async Task<MalishResponseData> ConvertNomenclatureAsync(string categoriesJson, string productsJson)
         {
-            return null;
+            return await Task.Run(() =>
+            {
+                var categories = JsonConvert.DeserializeObject<List<MalishNomenclatureCategory>>(categoriesJson);
+                var products = JsonConvert.DeserializeObject<List<MalishNomenclatureProduct>>(productsJson);
+
+                var nomenclature = new MalishResponseData()
+                {
+                    ProductCategories = categories,
+                    Products = products
+                };
+                return nomenclature;
+            });
         }
         
         public async Task<List<GreenAppleNomenclatureCategory>> ConvertCategoriesAsync(List<MalishCategory> categories)
