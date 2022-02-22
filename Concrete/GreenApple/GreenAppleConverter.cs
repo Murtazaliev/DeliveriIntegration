@@ -16,9 +16,9 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
         {
             return await Task.Run(() =>
             {
-                var sections = JsonConvert.DeserializeObject<List<NomenclatureCategory>>(sectionsJson);
-                var categories = JsonConvert.DeserializeObject<List<NomenclatureCategory>>(categoriesJson);
-                var products = JsonConvert.DeserializeObject<List<NomenclatureProduct>>(productsJson);
+                var sections = JsonConvert.DeserializeObject<List<GreenAppleNomenclatureCategory>>(sectionsJson);
+                var categories = JsonConvert.DeserializeObject<List<GreenAppleNomenclatureCategory>>(categoriesJson);
+                var products = JsonConvert.DeserializeObject<List<GreenAppleNomenclatureProduct>>(productsJson);
 
                 var nomenclature = new GreenAppleResponseData()
                 {
@@ -30,14 +30,14 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             });
         }
 
-        public async Task<List<NomenclatureCategory>> ConvertSectionsAsync(List<GreenAppleModels.GreenAppleSection> sections)
+        public async Task<List<GreenAppleNomenclatureCategory>> ConvertSectionsAsync(List<GreenAppleModels.GreenAppleSection> sections)
         {
             return await Task.Run(() =>
             {
-                List<NomenclatureCategory> productCategories = new List<NomenclatureCategory>();
+                List<GreenAppleNomenclatureCategory> productCategories = new List<GreenAppleNomenclatureCategory>();
                 sections.ForEach(section =>
                 {
-                    NomenclatureCategory productCategory = new NomenclatureCategory()
+                    GreenAppleNomenclatureCategory productCategory = new GreenAppleNomenclatureCategory()
                     {
                         ExternalId = section.ExternalId,
                         CategoryPriority = section.Sort,
@@ -49,14 +49,14 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             });
         }
         
-        public async Task<List<NomenclatureCategory>> ConvertCategoriesAsync(List<GreenAppleModels.GreenAppleCategory> categories)
+        public async Task<List<GreenAppleNomenclatureCategory>> ConvertCategoriesAsync(List<GreenAppleModels.GreenAppleCategory> categories)
         {
             return await Task.Run(() =>
             {
-                List<NomenclatureCategory> productCategories = new List<NomenclatureCategory>();
+                List<GreenAppleNomenclatureCategory> productCategories = new List<GreenAppleNomenclatureCategory>();
                 categories.ForEach(category =>
                 {
-                    NomenclatureCategory productCategory = new NomenclatureCategory()
+                    GreenAppleNomenclatureCategory productCategory = new GreenAppleNomenclatureCategory()
                     {
                         ExternalId = category.ExternalId,
                         CategoryPriority = category.Sort,
@@ -69,14 +69,14 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             });
         }
         
-        public async Task<List<NomenclatureProduct>> ConvertProductsAsync(List<GreenAppleModels.GreenAppleProduct> products)
+        public async Task<List<GreenAppleNomenclatureProduct>> ConvertProductsAsync(List<GreenAppleModels.GreenAppleProduct> products)
         {
             return await Task.Run(() =>
             {
-                List<NomenclatureProduct> deliveryProducts = new List<NomenclatureProduct>();
+                List<GreenAppleNomenclatureProduct> deliveryProducts = new List<GreenAppleNomenclatureProduct>();
                 products.ForEach(product =>
                 {
-                    NomenclatureProduct deliveryProduct = new NomenclatureProduct()
+                    GreenAppleNomenclatureProduct deliveryProduct = new GreenAppleNomenclatureProduct()
                     {
                         ExternalId = product.ExternalId,
                         ExternalCategoryId = product.ExternalCategoryId,

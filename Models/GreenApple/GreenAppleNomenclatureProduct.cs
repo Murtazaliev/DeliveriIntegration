@@ -1,6 +1,6 @@
 ﻿namespace Delivery.SelfServiceKioskApi.Models.GreenApple
 {
-    public class NomenclatureProduct
+    public class GreenAppleNomenclatureProduct
     {
         public string ExternalId { get; set; }
         public string ExternalCategoryId { get; set; }
