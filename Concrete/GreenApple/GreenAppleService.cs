@@ -8,7 +8,6 @@ using Delivery.SelfServiceKioskApi.Helpers;
 using Delivery.SelfServiceKioskApi.Models.GreenApple;
 using Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels;
 using Newtonsoft.Json;
-using Product = Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels.Product;
 
 namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
 {
@@ -23,7 +22,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             _converter = new GreenAppleConverter();
         }
 
-        public async Task SaveSections(List<Section> sections)
+        public async Task SaveSections(List<GreenAppleSection> sections)
         {
             var result = await _converter.ConvertSectionsAsync(sections);
 
@@ -40,7 +39,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             await _dbContext.SaveChangesAsync();
         }
         
-        public async Task SaveCategories(List<Category> categories)
+        public async Task SaveCategories(List<GreenAppleCategory> categories)
         {
             var result = await _converter.ConvertCategoriesAsync(categories);
 
@@ -57,7 +56,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             await _dbContext.SaveChangesAsync();
         }
         
-        public async Task SaveProducts(List<Product> products)
+        public async Task SaveProducts(List<GreenAppleProduct> products)
         {
             var result = await _converter.ConvertProductsAsync(products);
 
@@ -74,7 +73,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<NomenclatureResponseData> GetNomenclature()
+        public async Task<GreenAppleResponseData> GetNomenclature()
         {
             var sections = _dbContext.QueueRequests
                 .OrderBy(n => n.RequestDate)

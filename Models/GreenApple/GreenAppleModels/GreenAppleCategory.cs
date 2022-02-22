@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels
 {
-    public class Category
+    public class GreenAppleCategory
     {
         [JsonProperty("name_ru")]
         [JsonPropertyName("name_ru")]

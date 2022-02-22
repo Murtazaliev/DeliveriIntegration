@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Delivery.SelfServiceKioskApi.Models.GreenApple;
 using Newtonsoft.Json;
 using GreenAppleModels = Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels;
-using DeliveryModels = Delivery.SelfServiceKioskApi.Models.Delivery;
 
-namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
+namespace Delivery.SelfServiceKioskApi.Concrete.Malish
 {
-    public class GreenAppleConverter
+    public class MalishConverter
     {
         public async Task<GreenAppleResponseData> ConvertNomenclatureAsync(string sectionsJson,
             string categoriesJson,

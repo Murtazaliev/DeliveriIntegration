@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels
 {
-    public class Section
+    public class GreenAppleSection
     {
         [JsonProperty("name")]
         [JsonPropertyName("name")]
