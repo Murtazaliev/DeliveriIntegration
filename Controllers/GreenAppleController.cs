@@ -13,12 +13,12 @@ namespace Delivery.SelfServiceKioskApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class IntegrationController : ControllerBase
+    public class GreenAppleController : ControllerBase
     {
         private readonly DeliveryKioskApiContext _dbContext;
         private readonly GreenAppleService _appleService;
 
-        public IntegrationController(DeliveryKioskApiContext dbContext)
+        public GreenAppleController(DeliveryKioskApiContext dbContext)
         {
             _dbContext = dbContext;
             _appleService = new GreenAppleService(dbContext);
