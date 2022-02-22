@@ -54,7 +54,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
                 {
                     MalishNomenclatureProduct deliveryProduct = new MalishNomenclatureProduct()
                     {
-                        ExternalId = product.KlsUnicode,
+                        ExternalId = product.SkuCode,
                         ExternalCategoryId = product.KlsUnicode,
                         Name = product.CmpName,
                         Cost = product.Discount,
