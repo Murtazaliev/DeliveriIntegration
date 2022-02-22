@@ -76,7 +76,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
         public async Task<GreenAppleResponseData> GetNomenclature()
         {
             var sections = _dbContext.QueueRequests
-                .OrderBy(n => n.RequestDate)
+                .OrderByDescending(n => n.RequestDate)
                 .FirstOrDefault(n =>
                     n.IdOrganization == Organisations.GreenAppleId && 
                     n.RequestDate.Date == DateTime.Today.Date && 
@@ -84,7 +84,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
                     n.RequestName == GreenAppleFileNames.Sections);
 
             var categories = _dbContext.QueueRequests
-                .OrderBy(n => n.RequestDate)
+                .OrderByDescending(n => n.RequestDate)
                 .FirstOrDefault(n =>
                     n.IdOrganization == Organisations.GreenAppleId && 
                     n.RequestDate.Date == DateTime.Today.Date && 
@@ -92,7 +92,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
                     n.RequestName == GreenAppleFileNames.Categories);
 
             var products = _dbContext.QueueRequests
-                .OrderBy(n => n.RequestDate)
+                .OrderByDescending(n => n.RequestDate)
                 .FirstOrDefault(n =>
                     n.IdOrganization == Organisations.GreenAppleId && 
                     n.RequestDate.Date == DateTime.Today.Date && 

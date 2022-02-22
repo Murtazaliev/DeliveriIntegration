@@ -125,11 +125,11 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             };
             root.order = new IikoOrder
             {
-                date = data.order.CreateDatetime.ToString("yyyy-MM-dd HH:mm:ss"),
                 id = Guid.NewGuid().ToString(),
                 isSelfService = "false",
                 phone = data.customer.Phonenumber,
-                personsCount = data.order.PersonsCount
+                personsCount = data.order.PersonsCount,
+                comment = data.order.Comment
             };
 
             if (data.order.PaymentItems != null)
