@@ -5,8 +5,8 @@ namespace Delivery.SelfServiceKioskApi.Models.Malish
 {
     public class MalishResponseData
     {
-        public List<NomenclatureCategory> ProductCategories { get; set; }
-        public List<NomenclatureProduct> Products { get; set; }
+        public List<MalishNomenclatureCategory> ProductCategories { get; set; }
+        public List<MalishNomenclatureProduct> Products { get; set; }
     }
 }
 

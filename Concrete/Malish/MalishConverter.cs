@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Delivery.SelfServiceKioskApi.Models.GreenApple;
+using Delivery.SelfServiceKioskApi.Models.Malish;
+using Delivery.SelfServiceKioskApi.Models.Malish.MalishModels;
 using Newtonsoft.Json;
 using GreenAppleModels = Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels;
 
@@ -8,58 +10,23 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
 {
     public class MalishConverter
     {
-        public async Task<GreenAppleResponseData> ConvertNomenclatureAsync(string sectionsJson,
-            string categoriesJson,
-            string productsJson)
+        public async Task<MalishResponseData> ConvertNomenclatureAsync(string categoriesJson, string productsJson)
         {
-            return await Task.Run(() =>
-            {
-                var sections = JsonConvert.DeserializeObject<List<NomenclatureCategory>>(sectionsJson);
-                var categories = JsonConvert.DeserializeObject<List<NomenclatureCategory>>(categoriesJson);
-                var products = JsonConvert.DeserializeObject<List<NomenclatureProduct>>(productsJson);
-
-                var nomenclature = new GreenAppleResponseData()
-                {
-                    Sections = sections,
-                    ProductCategories = categories,
-                    Products = products
-                };
-                return nomenclature;
-            });
-        }
-
-        public async Task<List<NomenclatureCategory>> ConvertSectionsAsync(List<GreenAppleModels.GreenAppleSection> sections)
-        {
-            return await Task.Run(() =>
-            {
-                List<NomenclatureCategory> productCategories = new List<NomenclatureCategory>();
-                sections.ForEach(section =>
-                {
-                    NomenclatureCategory productCategory = new NomenclatureCategory()
-                    {
-                        ExternalId = section.ExternalId,
-                        CategoryPriority = section.Sort,
-                        CategoryName = section.Name
-                    };
-                    productCategories.Add(productCategory);
-                });
-                return productCategories;
-            });
+            return null;
         }
         
-        public async Task<List<NomenclatureCategory>> ConvertCategoriesAsync(List<GreenAppleModels.GreenAppleCategory> categories)
+        public async Task<List<GreenAppleNomenclatureCategory>> ConvertCategoriesAsync(List<MalishCategory> categories)
         {
             return await Task.Run(() =>
             {
-                List<NomenclatureCategory> productCategories = new List<NomenclatureCategory>();
+                List<GreenAppleNomenclatureCategory> productCategories = new List<GreenAppleNomenclatureCategory>();
                 categories.ForEach(category =>
                 {
-                    NomenclatureCategory productCategory = new NomenclatureCategory()
+                    GreenAppleNomenclatureCategory productCategory = new GreenAppleNomenclatureCategory()
                     {
-                        ExternalId = category.ExternalId,
-                        CategoryPriority = category.Sort,
-                        CategoryName = category.NameRu,
-                        ExternalParentId = category.ExternalSectionId
+                        ExternalId = category.KlsUnicode,
+                        CategoryName = category.KlsName,
+                        ExternalParentId = category.KlsParent
                     };
                     productCategories.Add(productCategory);
                 });
@@ -67,21 +34,20 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
             });
         }
         
-        public async Task<List<NomenclatureProduct>> ConvertProductsAsync(List<GreenAppleModels.GreenAppleProduct> products)
+        public async Task<List<MalishNomenclatureProduct>> ConvertProductsAsync(List<MalishProduct> products)
         {
             return await Task.Run(() =>
             {
-                List<NomenclatureProduct> deliveryProducts = new List<NomenclatureProduct>();
+                List<MalishNomenclatureProduct> deliveryProducts = new List<MalishNomenclatureProduct>();
                 products.ForEach(product =>
                 {
-                    NomenclatureProduct deliveryProduct = new NomenclatureProduct()
+                    MalishNomenclatureProduct deliveryProduct = new MalishNomenclatureProduct()
                     {
-                        ExternalId = product.ExternalId,
-                        ExternalCategoryId = product.ExternalCategoryId,
-                        Name = product.NameRu,
-                        Cost = product.Cost,
-                        OldPrice = product.OldPrice,
-                        IsVisible = !product.Hidden,
+                        ExternalId = product.KlsUnicode,
+                        ExternalCategoryId = product.KlsUnicode,
+                        Name = product.CmpName,
+                        Cost = product.Discount,
+                        OldPrice = product.Price,
                     };
                     
                     deliveryProducts.Add(deliveryProduct);

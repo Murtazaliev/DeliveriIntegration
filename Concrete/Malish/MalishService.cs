@@ -24,19 +24,38 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
             _converter = new MalishConverter();
         }
 
-        public async Task SaveSections(List<GreenAppleSection> sections)
-        {
-            
-        }
-        
         public async Task SaveCategories(List<MalishCategory> categories)
         {
-            
+            var result = await _converter.ConvertCategoriesAsync(categories);
+
+            var request = new QueueRequest()
+            {
+                Id = Guid.NewGuid(),
+                RequestName = MalishFileNames.Kls,
+                RequestDate = DateTime.Now,
+                IsProcessed = false,
+                IdOrganization = Organisations.MalishId, // Малыш
+                Answer = JsonConvert.SerializeObject(result),
+            };
+            await _dbContext.QueueRequests.AddAsync(request);
+            await _dbContext.SaveChangesAsync();
         }
         
         public async Task SaveProducts(List<MalishProduct> products)
         {
-            
+            var result = await _converter.ConvertProductsAsync(products);
+
+            var request = new QueueRequest()
+            {
+                Id = Guid.NewGuid(),
+                RequestName = MalishFileNames.Goods,
+                RequestDate = DateTime.Now,
+                IsProcessed = false,
+                IdOrganization = Organisations.MalishId, // Малыш
+                Answer = JsonConvert.SerializeObject(result),
+            };
+            await _dbContext.QueueRequests.AddAsync(request);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<MalishResponseData> GetNomenclature()
