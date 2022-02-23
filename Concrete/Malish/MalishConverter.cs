@@ -58,8 +58,8 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
                         ExternalId = product.SkuCode,
                         ExternalCategoryId = product.KlsUnicode,
                         Name = product.CmpName,
-                        Cost = product.Discount,
-                        OldPrice = product.Price,
+                        Cost = product.Discount != 0 ? product.Discount : product.Price,
+                        OldPrice = product.Discount != 0 ? product.Price : 0,
                     };
                     
                     deliveryProducts.Add(deliveryProduct);
