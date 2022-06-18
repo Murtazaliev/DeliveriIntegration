@@ -7,10 +7,11 @@ using Delivery.SelfServiceKioskApi.Concrete.GreenApple;
 using Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Delivery.SelfServiceKioskApi.Helpers;
 
 namespace Delivery.SelfServiceKioskApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route(template: Routes.ControllerRoute)]
     [ApiController]
     public class GreenAppleController : ControllerBase
     {

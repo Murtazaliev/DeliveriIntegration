@@ -19,6 +19,8 @@ namespace Delivery.SelfServiceKioskApi
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+
         }
 
         public IConfiguration Configuration { get; }
@@ -28,6 +30,7 @@ namespace Delivery.SelfServiceKioskApi
         {
             services.AddTransient<DeliveryKioskApiContext>();
             services.AddControllers();
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +40,8 @@ namespace Delivery.SelfServiceKioskApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Delivery v1"));
 
             app.UseHttpsRedirection();
 
@@ -47,7 +52,7 @@ namespace Delivery.SelfServiceKioskApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });
+            });   
         }
     }
 }

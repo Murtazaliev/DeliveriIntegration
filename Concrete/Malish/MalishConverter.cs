@@ -10,13 +10,10 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
 {
     public class MalishConverter
     {
-        public async Task<MalishResponseData> ConvertNomenclatureAsync(string categoriesJson, string productsJson)
+        public async Task<MalishResponseData> ConvertNomenclatureAsync(List<MalishNomenclatureCategory> categories, List<MalishNomenclatureProduct> products)
         {
             return await Task.Run(() =>
             {
-                var categories = JsonConvert.DeserializeObject<List<MalishNomenclatureCategory>>(categoriesJson);
-                var products = JsonConvert.DeserializeObject<List<MalishNomenclatureProduct>>(productsJson);
-
                 var nomenclature = new MalishResponseData()
                 {
                     ProductCategories = categories,
@@ -26,14 +23,15 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
             });
         }
         
-        public async Task<List<GreenAppleNomenclatureCategory>> ConvertCategoriesAsync(List<MalishCategory> categories)
+        public async Task<List<MalishNomenclatureCategory>> ConvertCategoriesAsync(string categoriesJson)
         {
             return await Task.Run(() =>
             {
-                List<GreenAppleNomenclatureCategory> productCategories = new List<GreenAppleNomenclatureCategory>();
+                var categories = JsonConvert.DeserializeObject<List<MalishCategory>>(categoriesJson);
+                List<MalishNomenclatureCategory> productCategories = new List<MalishNomenclatureCategory>();
                 categories.ForEach(category =>
                 {
-                    GreenAppleNomenclatureCategory productCategory = new GreenAppleNomenclatureCategory()
+                    MalishNomenclatureCategory productCategory = new MalishNomenclatureCategory()
                     {
                         ExternalId = category.KlsUnicode,
                         CategoryName = category.KlsName,
@@ -45,11 +43,12 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
             });
         }
         
-        public async Task<List<MalishNomenclatureProduct>> ConvertProductsAsync(List<MalishProduct> products)
+        public async Task<List<MalishNomenclatureProduct>> ConvertProductsAsync(string productsJson)
         {
             return await Task.Run(() =>
             {
-                List<MalishNomenclatureProduct> deliveryProducts = new List<MalishNomenclatureProduct>();
+                var products = JsonConvert.DeserializeObject<List<MalishProduct>>(productsJson);
+                List <MalishNomenclatureProduct> deliveryProducts = new List<MalishNomenclatureProduct>();
                 products.ForEach(product =>
                 {
                     MalishNomenclatureProduct deliveryProduct = new MalishNomenclatureProduct()
@@ -58,8 +57,10 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
                         ExternalId = product.SkuCode,
                         ExternalCategoryId = product.KlsUnicode,
                         Name = product.CmpName,
-                        Cost = product.Discount != 0 ? product.Discount : product.Price,
-                        OldPrice = product.Discount != 0 ? product.Price : 0,
+                        Cost = product.Price,
+                        OldPrice = product.Discount != 0 ? product.Price + product.Discount : 0,
+                        Quantity = product.Quantity,
+                        IsVisible = product.Quantity > 0
                     };
                     
                     deliveryProducts.Add(deliveryProduct);

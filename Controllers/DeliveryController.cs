@@ -9,11 +9,11 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Delivery.SelfServiceKioskApi.Concrete.Rkeeper;
-
+using Delivery.SelfServiceKioskApi.Helpers;
 
 namespace Delivery.SelfServiceKioskApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route(template: Routes.ControllerRoute)]
     [ApiController]
     public class DeliveryController : ControllerBase
     {

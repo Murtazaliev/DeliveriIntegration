@@ -82,6 +82,31 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
                                 }).ToList();
                                 product.RequiredAdditiveGroups.Add(requiredAdditiveGroup);
                             }
+
+                            foreach (var modifier in subItem.modifiers.ToList())
+                            {
+                                if (modifier.modifierId == null)
+                                    continue;
+
+                                var modifierToAdd = data.products.FirstOrDefault(n => n.id == modifier.modifierId);
+                                var requiredAdditiveGroup = new RequiredAdditiveGroup();
+                                requiredAdditiveGroup.Id = Guid.NewGuid();
+                                requiredAdditiveGroup.ModifierId = modifier.modifierId ?? Guid.Empty;
+                                requiredAdditiveGroup.Name = modifierToAdd.name;
+
+
+                                requiredAdditiveGroup.Additives = new List<Additive>()
+                                {
+                                    new Additive
+                                    {
+                                        Id = Guid.NewGuid(),
+                                        ModifierId = modifier.modifierId ?? Guid.Empty,
+                                        Cost = 0,
+                                        Name = modifierToAdd.name
+                                    }
+                                };
+                                product.RequiredAdditiveGroups.Add(requiredAdditiveGroup);
+                            }
                         }
                         group.Products.Add(product);
                     }
@@ -125,11 +150,12 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
             };
             root.order = new IikoOrder
             {
-                id = Guid.NewGuid().ToString(),
+                id = data.order.Id.ToString(),
                 isSelfService = "false",
                 phone = data.customer.Phonenumber,
                 personsCount = data.order.PersonsCount,
-                comment = data.order.Comment
+                comment = data.order.Comment,
+                /*data.order.CreateDatetime == null ? "" : data.order.CreateDatetime.Value.ToString("yyyy-MM-dd HH:mm:ss")*/
             };
 
             if (data.order.PaymentItems != null)
@@ -162,7 +188,9 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Iiko
                 };
 
                 if (item.Additives.Count > 0)
+                {
                     product.modifiers = item.Additives;
+                }
                 root.order.items.Add(product);
             }
 

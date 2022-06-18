@@ -9,7 +9,7 @@ namespace Delivery.SelfServiceKioskApi.Models.Delivery.Order
     {
         public Guid Id { get; set; }
         public string Number { get; set; }
-        public DateTime CreateDatetime { get; set; }
+        public DateTime? CreateDatetime { get; set; }
         public decimal Sum { get; set; }
         public string Comment { get; set; }
         public List<PaymentItem> PaymentItems { get; set; }

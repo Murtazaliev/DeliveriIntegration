@@ -9,5 +9,6 @@
         public decimal OldPrice { get; set; }
         public string StoreCode { get; set; }
         public int Quantity { get; set; }
+        public bool IsVisible { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Delivery.SelfServiceKioskApi.Concrete.GreenApple;
 using Delivery.SelfServiceKioskApi.DbModel;
@@ -26,8 +27,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
 
         public async Task SaveCategories(List<MalishCategory> categories)
         {
-            var result = await _converter.ConvertCategoriesAsync(categories);
-
+            var answer = JsonConvert.SerializeObject(categories);
             var request = new QueueRequest()
             {
                 Id = Guid.NewGuid(),
@@ -35,7 +35,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
                 RequestDate = DateTime.Now,
                 IsProcessed = false,
                 IdOrganization = Organisations.MalishId, // Малыш
-                Answer = JsonConvert.SerializeObject(result),
+                Answer = DecodeToUtf8(answer),
             };
             await _dbContext.QueueRequests.AddAsync(request);
             await _dbContext.SaveChangesAsync();
@@ -43,8 +43,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
         
         public async Task SaveProducts(List<MalishProduct> products)
         {
-            var result = await _converter.ConvertProductsAsync(products);
-
+            var answer = JsonConvert.SerializeObject(products);
             var request = new QueueRequest()
             {
                 Id = Guid.NewGuid(),
@@ -52,7 +51,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
                 RequestDate = DateTime.Now,
                 IsProcessed = false,
                 IdOrganization = Organisations.MalishId, // Малыш
-                Answer = JsonConvert.SerializeObject(result),
+                Answer = DecodeToUtf8(answer),
             };
             await _dbContext.QueueRequests.AddAsync(request);
             await _dbContext.SaveChangesAsync();
@@ -79,7 +78,10 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
             if (string.IsNullOrEmpty(products?.Answer) || string.IsNullOrEmpty(categories?.Answer))
                 throw new Exception("Одна или несколько записей номенклатуры отсутствуют или уже были загружены.");
             
-            var nomenclature = await _converter.ConvertNomenclatureAsync(categories.Answer, products.Answer);
+            var productsAnswer = await _converter.ConvertProductsAsync(products?.Answer);
+            var categoriesAnswer = await _converter.ConvertCategoriesAsync(categories?.Answer);
+
+            var nomenclature = await _converter.ConvertNomenclatureAsync(categoriesAnswer, productsAnswer);
 /*
             categories.IsProcessed = true;
             categories.AnswerDate = DateTime.Now;
@@ -88,6 +90,16 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
 
             await _dbContext.SaveChangesAsync();
             return nomenclature;
+        }
+
+        private string DecodeToUtf8(string text)
+        {
+            Encoding utf8 = Encoding.GetEncoding("UTF-8");
+            Encoding win1251 = Encoding.GetEncoding("Windows-1251");
+
+            byte[] utf8Bytes = win1251.GetBytes(text);
+            byte[] win1251Bytes = Encoding.Convert(utf8, win1251, utf8Bytes);
+            return win1251.GetString(win1251Bytes);
         }
     }
 }

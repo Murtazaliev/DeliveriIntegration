@@ -9,7 +9,7 @@ namespace Delivery.SelfServiceKioskApi.Models.Iiko.Order
     {
         public string id { get; set; }
         public string name { get; set; }
-        public int amount { get; set; } = 1;
+        public int? amount { get; set; } = 1;
         public string groupId { get; set; }
         public string groupName { get; set; }
     }
