@@ -22,6 +22,9 @@ namespace Delivery.SelfServiceKioskApi.Models.AsPrestige.AsPrestigeModels
 
         [JsonProperty("cost")]
         public int Cost { get; set; }
+        
+        [JsonProperty("oldPrice")]
+        public int OldPrice { get; set; }
 
         [JsonProperty("hidden")]
         public bool Hidden { get; set; }

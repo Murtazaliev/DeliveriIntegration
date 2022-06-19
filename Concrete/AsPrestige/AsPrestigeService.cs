@@ -3,77 +3,75 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Delivery.SelfServiceKioskApi.Concrete.GreenApple;
+using Delivery.SelfServiceKioskApi.Concrete.Malish;
 using Delivery.SelfServiceKioskApi.DbModel;
 using Delivery.SelfServiceKioskApi.Helpers;
-using Delivery.SelfServiceKioskApi.Models.GreenApple;
-using Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels;
-using Delivery.SelfServiceKioskApi.Models.Malish;
-using Delivery.SelfServiceKioskApi.Models.Malish.MalishModels;
+using Delivery.SelfServiceKioskApi.Models.AsPrestige;
+using Delivery.SelfServiceKioskApi.Models.AsPrestige.AsPrestigeModels;
 using Newtonsoft.Json;
 
-namespace Delivery.SelfServiceKioskApi.Concrete.Malish
+namespace Delivery.SelfServiceKioskApi.Concrete.AsPrestige
 {
-    public class MalishService
+    public class AsPrestigeService
     {
         private DeliveryKioskApiContext _dbContext;
-        private MalishConverter _converter;
+        private AsPrestigeConverter _converter;
 
-        public MalishService(DeliveryKioskApiContext dbContext)
+        public AsPrestigeService(DeliveryKioskApiContext dbContext)
         {
             _dbContext = dbContext;
-            _converter = new MalishConverter();
+            _converter = new AsPrestigeConverter();
         }
 
-        public async Task SaveCategories(List<MalishCategory> categories)
+        public async Task SaveCategories(List<AsPrestigeCategory> categories)
         {
             var answer = JsonConvert.SerializeObject(categories);
             var request = new QueueRequest()
             {
                 Id = Guid.NewGuid(),
-                RequestName = FileNames.MalishFileNames.Kls,
+                RequestName = FileNames.AsPrestigeFileNames.AsCategories,
                 RequestDate = DateTime.Now,
                 IsProcessed = false,
-                IdOrganization = Organisations.MalishId, // Малыш
+                IdOrganization = Organisations.AsPrestigeId, // Ас-Престиж
                 Answer = DecodeToUtf8(answer),
             };
             await _dbContext.QueueRequests.AddAsync(request);
             await _dbContext.SaveChangesAsync();
         }
         
-        public async Task SaveProducts(List<MalishProduct> products)
+        public async Task SaveProducts(List<AsPrestigeProduct> products)
         {
             var answer = JsonConvert.SerializeObject(products);
             var request = new QueueRequest()
             {
                 Id = Guid.NewGuid(),
-                RequestName = FileNames.MalishFileNames.Goods,
+                RequestName = FileNames.AsPrestigeFileNames.AsProducts,
                 RequestDate = DateTime.Now,
                 IsProcessed = false,
-                IdOrganization = Organisations.MalishId, // Малыш
-                Answer = DecodeToUtf8(answer),
+                IdOrganization = Organisations.AsPrestigeId, // Ас-Престиж
+                Answer = answer,
             };
             await _dbContext.QueueRequests.AddAsync(request);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<MalishResponseData> GetNomenclature()
+        public async Task<AsPrestigeResponseData> GetNomenclature()
         {
             var categories = _dbContext.QueueRequests
                 .OrderByDescending(n => n.RequestDate)
                 .FirstOrDefault(n =>
-                    n.IdOrganization == Organisations.MalishId && 
+                    n.IdOrganization == Organisations.AsPrestigeId && 
                     n.RequestDate.Date == DateTime.Today.Date && 
                     n.IsProcessed == false && 
-                    n.RequestName == FileNames.MalishFileNames.Kls);
+                    n.RequestName == FileNames.AsPrestigeFileNames.AsCategories);
 
             var products = _dbContext.QueueRequests
                 .OrderByDescending(n => n.RequestDate)
                 .FirstOrDefault(n =>
-                    n.IdOrganization == Organisations.MalishId && 
+                    n.IdOrganization == Organisations.AsPrestigeId && 
                     n.RequestDate.Date == DateTime.Today.Date && 
                     n.IsProcessed == false && 
-                    n.RequestName == FileNames.MalishFileNames.Goods);
+                    n.RequestName == FileNames.AsPrestigeFileNames.AsProducts);
 
             if (string.IsNullOrEmpty(products?.Answer) || string.IsNullOrEmpty(categories?.Answer))
                 throw new Exception("Одна или несколько записей номенклатуры отсутствуют или уже были загружены.");

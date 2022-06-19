@@ -7,7 +7,7 @@
         public string Name { get; set; }
         public decimal Cost { get; set; }
         public decimal OldPrice { get; set; }
-        public string StoreCode { get; set; }
+        public string Weight { get; set; }
         public int Quantity { get; set; }
         public bool IsVisible { get; set; }
     }

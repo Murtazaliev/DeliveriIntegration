@@ -29,7 +29,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             var request = new QueueRequest()
             {
                 Id = Guid.NewGuid(),
-                RequestName = GreenAppleFileNames.Sections,
+                RequestName = FileNames.GreenAppleFileNames.Sections,
                 RequestDate = DateTime.Now,
                 IsProcessed = false,
                 IdOrganization = Organisations.GreenAppleId, // Зеленое яблоко
@@ -46,7 +46,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             var request = new QueueRequest()
             {
                 Id = Guid.NewGuid(),
-                RequestName = GreenAppleFileNames.Categories,
+                RequestName = FileNames.GreenAppleFileNames.Categories,
                 RequestDate = DateTime.Now,
                 IsProcessed = false,
                 IdOrganization = Organisations.GreenAppleId, // Зеленое яблоко
@@ -63,7 +63,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
             var request = new QueueRequest()
             {
                 Id = Guid.NewGuid(),
-                RequestName = GreenAppleFileNames.Products,
+                RequestName = FileNames.GreenAppleFileNames.Products,
                 RequestDate = DateTime.Now,
                 IsProcessed = false,
                 IdOrganization = Organisations.GreenAppleId, // Зеленое яблоко
@@ -81,7 +81,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
                     n.IdOrganization == Organisations.GreenAppleId && 
                     n.RequestDate.Date == DateTime.Today.Date && 
                     n.IsProcessed == false && 
-                    n.RequestName == GreenAppleFileNames.Sections);
+                    n.RequestName == FileNames.GreenAppleFileNames.Sections);
 
             var categories = _dbContext.QueueRequests
                 .OrderByDescending(n => n.RequestDate)
@@ -89,7 +89,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
                     n.IdOrganization == Organisations.GreenAppleId && 
                     n.RequestDate.Date == DateTime.Today.Date && 
                     n.IsProcessed == false && 
-                    n.RequestName == GreenAppleFileNames.Categories);
+                    n.RequestName == FileNames.GreenAppleFileNames.Categories);
 
             var products = _dbContext.QueueRequests
                 .OrderByDescending(n => n.RequestDate)
@@ -97,7 +97,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.GreenApple
                     n.IdOrganization == Organisations.GreenAppleId && 
                     n.RequestDate.Date == DateTime.Today.Date && 
                     n.IsProcessed == false && 
-                    n.RequestName == GreenAppleFileNames.Products);
+                    n.RequestName == FileNames.GreenAppleFileNames.Products);
 
             if (string.IsNullOrEmpty(sections?.Answer) || string.IsNullOrEmpty(products?.Answer) || string.IsNullOrEmpty(categories?.Answer))
                 throw new Exception("Одна или несколько записей номенклатуры отсутствуют или уже были загружены.");
