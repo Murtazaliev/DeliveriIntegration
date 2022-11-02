@@ -6,72 +6,72 @@ using System.Threading.Tasks;
 using Delivery.SelfServiceKioskApi.Concrete.Malish;
 using Delivery.SelfServiceKioskApi.DbModel;
 using Delivery.SelfServiceKioskApi.Helpers;
-using Delivery.SelfServiceKioskApi.Models.AsPrestige;
-using Delivery.SelfServiceKioskApi.Models.AsPrestige.AsPrestigeModels;
+using Delivery.SelfServiceKioskApi.Models.Celitel;
+using Delivery.SelfServiceKioskApi.Models.Celitel.CelitelModels;
 using Newtonsoft.Json;
 
-namespace Delivery.SelfServiceKioskApi.Concrete.AsPrestige
+namespace Delivery.SelfServiceKioskApi.Concrete.Celitel
 {
-    public class AsPrestigeService
+    public class CelitelService
     {
         private DeliveryKioskApiContext _dbContext;
-        private AsPrestigeConverter _converter;
+        private CelitelConverter _converter;
 
-        public AsPrestigeService(DeliveryKioskApiContext dbContext)
+        public CelitelService(DeliveryKioskApiContext dbContext)
         {
             _dbContext = dbContext;
-            _converter = new AsPrestigeConverter();
+            _converter = new CelitelConverter();
         }
 
-        public async Task SaveCategories(List<AsPrestigeCategory> categories)
+        public async Task SaveCategories(List<CelitelCategory> categories)
         {
             var answer = JsonConvert.SerializeObject(categories);
             var request = new QueueRequest()
             {
                 Id = Guid.NewGuid(),
-                RequestName = FileNames.AsPrestigeFileNames.AsCategories,
+                RequestName = FileNames.CelitelFileNames.CelitelCategories,
                 RequestDate = DateTime.Now,
                 IsProcessed = false,
-                IdOrganization = Organisations.AsPrestigeId, // Ас-Престиж
+                IdOrganization = Organisations.CelitelId, // Целитель
                 Answer = answer,
             };
             await _dbContext.QueueRequests.AddAsync(request);
             await _dbContext.SaveChangesAsync();
         }
-        
-        public async Task SaveProducts(List<AsPrestigeProduct> products)
+
+        public async Task SaveProducts(List<CelitelProduct> products)
         {
             var answer = JsonConvert.SerializeObject(products);
             var request = new QueueRequest()
             {
                 Id = Guid.NewGuid(),
-                RequestName = FileNames.AsPrestigeFileNames.AsProducts,
+                RequestName = FileNames.CelitelFileNames.CelitelProducts,
                 RequestDate = DateTime.Now,
                 IsProcessed = false,
-                IdOrganization = Organisations.AsPrestigeId, // Ас-Престиж
+                IdOrganization = Organisations.CelitelId, // Целитель
                 Answer = answer,
             };
             await _dbContext.QueueRequests.AddAsync(request);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<AsPrestigeResponseData> GetNomenclature()
+        public async Task<CelitelResponseData> GetNomenclature()
         {
             var categories = _dbContext.QueueRequests
                 .OrderByDescending(n => n.RequestDate)
                 .FirstOrDefault(n =>
-                    n.IdOrganization == Organisations.AsPrestigeId && 
-                    n.RequestDate.Date == DateTime.Today.Date && 
-                    n.IsProcessed == false && 
-                    n.RequestName == FileNames.AsPrestigeFileNames.AsCategories);
+                    n.IdOrganization == Organisations.CelitelId &&
+                    n.RequestDate.Date == DateTime.Today.Date &&
+                    n.IsProcessed == false &&
+                    n.RequestName == FileNames.CelitelFileNames.CelitelCategories);
 
             var products = _dbContext.QueueRequests
                 .OrderByDescending(n => n.RequestDate)
                 .FirstOrDefault(n =>
-                    n.IdOrganization == Organisations.AsPrestigeId && 
-                    n.RequestDate.Date == DateTime.Today.Date && 
-                    n.IsProcessed == false && 
-                    n.RequestName == FileNames.AsPrestigeFileNames.AsProducts);
+                    n.IdOrganization == Organisations.CelitelId &&
+                    n.RequestDate.Date == DateTime.Today.Date &&
+                    n.IsProcessed == false &&
+                    n.RequestName == FileNames.CelitelFileNames.CelitelProducts);
 
             if (string.IsNullOrEmpty(products?.Answer) || string.IsNullOrEmpty(categories?.Answer))
                 throw new Exception("Одна или несколько записей номенклатуры отсутствуют или уже были загружены.");

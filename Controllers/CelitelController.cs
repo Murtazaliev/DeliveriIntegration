@@ -13,29 +13,29 @@ using Newtonsoft.Json.Serialization;
 using Delivery.SelfServiceKioskApi.Helpers;
 using Delivery.SelfServiceKioskApi.Models.AsPrestige.AsPrestigeModels;
 using Microsoft.AspNetCore.Authorization;
+using Delivery.SelfServiceKioskApi.Concrete.Celitel;
+using Delivery.SelfServiceKioskApi.Models.Celitel.CelitelModels;
 
 namespace Delivery.SelfServiceKioskApi.Controllers
 {
     [Route(template: Routes.ControllerRoute)]
     [ApiController]
-    public class AsPrestigeController : ControllerBase
+    public class CelitelController : ControllerBase
     {
-        private readonly DeliveryKioskApiContext _dbContext;
-        private readonly AsPrestigeService _asPrestigeService;
+        private readonly CelitelService _celitelService;
 
-        public AsPrestigeController(DeliveryKioskApiContext dbContext)
+        public CelitelController(DeliveryKioskApiContext dbContext)
         {
-            _dbContext = dbContext;
-            _asPrestigeService = new AsPrestigeService(dbContext);
+            _celitelService = new CelitelService(dbContext);
         }
 
         [HttpPost]
         [Route("sendCategories")]
-        public async Task<IActionResult> SendCategories([FromBody]List<AsPrestigeCategory> categories)
+        public async Task<IActionResult> SendCategories([FromBody]List<CelitelCategory> categories)
         {
             try
             {
-                await _asPrestigeService.SaveCategories(categories);
+                await _celitelService.SaveCategories(categories);
             }
             catch(Exception ex)
             {
@@ -47,11 +47,11 @@ namespace Delivery.SelfServiceKioskApi.Controllers
         
         [HttpPost]
         [Route("sendProducts")]
-        public async Task<IActionResult> SendProducts([FromBody]List<AsPrestigeProduct> products)
+        public async Task<IActionResult> SendProducts([FromBody]List<CelitelProduct> products)
         {
             try
             {
-                await _asPrestigeService.SaveProducts(products);
+                await _celitelService.SaveProducts(products);
             }
             catch(Exception ex)
             {
@@ -67,7 +67,7 @@ namespace Delivery.SelfServiceKioskApi.Controllers
         {
             try
             {
-                var nomenclature = await _asPrestigeService.GetNomenclature();
+                var nomenclature = await _celitelService.GetNomenclature();
                 return Ok(nomenclature);
             }
             catch(Exception ex)
