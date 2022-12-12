@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Delivery.SelfServiceKioskApi.Concrete;
 using Delivery.SelfServiceKioskApi.Concrete.GreenApple;
 using Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Delivery.SelfServiceKioskApi.Helpers;
+using Sentry;
 
 namespace Delivery.SelfServiceKioskApi.Controllers
 {
@@ -15,10 +17,12 @@ namespace Delivery.SelfServiceKioskApi.Controllers
     [ApiController]
     public class KaspAppleController : ControllerBase
     {
+        private readonly INomenclatureService _nomenclatureService;
         private readonly KaspAppleService _appleService;
 
-        public KaspAppleController(DeliveryKioskApiContext dbContext)
+        public KaspAppleController(DeliveryKioskApiContext dbContext, INomenclatureService nomenclatureService)
         {
+            _nomenclatureService = nomenclatureService;
             _appleService = new KaspAppleService(dbContext);
         }
 
@@ -33,6 +37,16 @@ namespace Delivery.SelfServiceKioskApi.Controllers
             catch(Exception ex)
             {
                 return BadRequest(ex);
+            }
+            
+            try
+            {
+                var nomenclature = await _appleService.GetNomenclature();
+                await _nomenclatureService.UpdateNomenclature(Organisations.KaspAppleId);
+            }
+            catch (Exception ex)
+            {
+                SentrySdk.CaptureException(ex);
             }
 
             return Ok();
@@ -51,6 +65,16 @@ namespace Delivery.SelfServiceKioskApi.Controllers
                 return BadRequest(ex);
             }
 
+            try
+            {
+                var nomenclature = await _appleService.GetNomenclature();
+                await _nomenclatureService.UpdateNomenclature(Organisations.KaspAppleId);
+            }
+            catch (Exception ex)
+            {
+                SentrySdk.CaptureException(ex);
+            }
+            
             return Ok();
         }
         
@@ -65,6 +89,16 @@ namespace Delivery.SelfServiceKioskApi.Controllers
             catch(Exception ex)
             {
                 return BadRequest(ex);
+            }
+            
+            try
+            {
+                var nomenclature = await _appleService.GetNomenclature();
+                await _nomenclatureService.UpdateNomenclature(Organisations.KaspAppleId);
+            }
+            catch (Exception ex)
+            {
+                SentrySdk.CaptureException(ex);
             }
 
             return Ok();

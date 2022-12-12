@@ -28,6 +28,15 @@ namespace Delivery.SelfServiceKioskApi
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseSentry(o =>
+                    {
+                        o.Dsn = "https://a013f1f1e59440d59a74846eeca4d02f@o1270911.ingest.sentry.io/4504316087369728";
+                        // When configuring for the first time, to see what the SDK is doing:
+                        o.Debug = true;
+                        // Set TracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+                        // We recommend adjusting this value in production.
+                        o.TracesSampleRate = 0.8;
+                    });
                 });
     }
 }

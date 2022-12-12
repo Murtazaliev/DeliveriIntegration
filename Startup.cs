@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Delivery.SelfServiceKioskApi.Concrete;
 
 namespace Delivery.SelfServiceKioskApi
 {
@@ -32,6 +33,7 @@ namespace Delivery.SelfServiceKioskApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<DeliveryKioskApiContext>();
+            services.AddTransient<INomenclatureService, NomenclatureService>();
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -63,7 +65,7 @@ namespace Delivery.SelfServiceKioskApi
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Delivery v1"));
 
             app.UseHttpsRedirection();
-
+            app.UseSentryTracing();
             app.UseRouting();
 
             app.UseAuthorization();

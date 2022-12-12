@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Delivery.SelfServiceKioskApi.Concrete;
 using Delivery.SelfServiceKioskApi.Concrete.GreenApple;
 using Delivery.SelfServiceKioskApi.Concrete.Malish;
 using Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels;
@@ -10,6 +11,7 @@ using Delivery.SelfServiceKioskApi.Models.Malish.MalishModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Delivery.SelfServiceKioskApi.Helpers;
+using Sentry;
 
 namespace Delivery.SelfServiceKioskApi.Controllers
 {
@@ -18,11 +20,13 @@ namespace Delivery.SelfServiceKioskApi.Controllers
     public class MalishController : ControllerBase
     {
         private readonly DeliveryKioskApiContext _dbContext;
+        private readonly INomenclatureService _nomenclatureService;
         private readonly MalishService _malishService;
 
-        public MalishController(DeliveryKioskApiContext dbContext)
+        public MalishController(DeliveryKioskApiContext dbContext, INomenclatureService nomenclatureService)
         {
             _dbContext = dbContext;
+            _nomenclatureService = nomenclatureService;
             _malishService = new MalishService(dbContext);
         }
 
@@ -37,6 +41,16 @@ namespace Delivery.SelfServiceKioskApi.Controllers
             catch(Exception ex)
             {
                 return BadRequest(ex);
+            }
+            
+            try
+            {
+                var nomenclature = await _malishService.GetNomenclature();
+                await _nomenclatureService.UpdateNomenclature(Organisations.MalishId);
+            }
+            catch (Exception ex)
+            {
+                SentrySdk.CaptureException(ex);
             }
 
             return Ok();
@@ -53,6 +67,16 @@ namespace Delivery.SelfServiceKioskApi.Controllers
             catch(Exception ex)
             {
                 return BadRequest(ex);
+            }
+            
+            try
+            {
+                var nomenclature = await _malishService.GetNomenclature();
+                await _nomenclatureService.UpdateNomenclature(Organisations.MalishId);
+            }
+            catch (Exception ex)
+            {
+                SentrySdk.CaptureException(ex);
             }
 
             return Ok();
