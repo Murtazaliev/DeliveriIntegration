@@ -21,9 +21,9 @@ namespace Delivery.SelfServiceKioskApi.Controllers
         private DeliveryService _delivery;
         private RkeeperService _rkeeperService;
 
-        public DeliveryController()
+        public DeliveryController(DeliveryKioskApiContext context)
         {
-            _delivery = new DeliveryService();
+            _delivery = new DeliveryService(context);
             _rkeeperService = new RkeeperService();
         }
 

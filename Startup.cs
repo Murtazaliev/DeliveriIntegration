@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Delivery.SelfServiceKioskApi.Concrete;
+using Microsoft.EntityFrameworkCore;
 
 namespace Delivery.SelfServiceKioskApi
 {
@@ -32,7 +33,7 @@ namespace Delivery.SelfServiceKioskApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<DeliveryKioskApiContext>();
+            services.AddDbContext<DeliveryKioskApiContext>(opt=>opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddTransient<INomenclatureService, NomenclatureService>();
             services.AddControllers();
             services.AddSwaggerGen();

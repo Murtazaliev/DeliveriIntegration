@@ -17,9 +17,7 @@ namespace Delivery.SelfServiceKioskApi
         
         public static void Main(string[] args)
         {
-            DeliveryService delivery = new DeliveryService();
-            Thread thread = new Thread(new ThreadStart(delivery.RunRequests));
-            thread.Start();
+            
             CreateHostBuilder(args).Build().Run();
         }
 

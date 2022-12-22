@@ -20,9 +20,9 @@ namespace Delivery.SelfServiceKioskApi.Concrete
         IConverter _converter;
         IKiosk _kiosk;
         DeliveryKioskApiContext _context;
-        public DeliveryService()
+        public DeliveryService(DeliveryKioskApiContext context)
         {
-            _context = new DeliveryKioskApiContext();
+            _context = context;
         }
 
         List<Product> Products = new List<Product>();
