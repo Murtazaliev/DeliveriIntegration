@@ -1,13 +1,14 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Delivery.SelfServiceKioskApi.Models.Celitel.CelitelModels
 {
     public class CelitelCategory
     {
-        [JsonPropertyName("externalid")]
+        [JsonProperty("externalid")]
         public int ExternalId { get; set; }
 
-        [JsonPropertyName("name_ru")]
+        [JsonProperty("name_ru")]
         public string NameRu { get; set; }
     }
 }

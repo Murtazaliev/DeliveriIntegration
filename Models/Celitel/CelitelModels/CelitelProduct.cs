@@ -5,16 +5,16 @@ namespace Delivery.SelfServiceKioskApi.Models.Celitel.CelitelModels
 {
     public class CelitelProduct
     {
-        [JsonPropertyName("name_ru")]
+        [JsonProperty("name_ru")]
         public string NameRu { get; set; }
 
-        [JsonPropertyName("weight")]
+        [JsonProperty("weight")]
         public string Weight { get; set; }
 
-        [JsonPropertyName("externalCategoryid")]
+        [JsonProperty("externalCategoryid")]
         public int? ExternalCategoryId { get; set; }
 
-        [JsonPropertyName("externalid")]
+        [JsonProperty("externalid")]
         public int ExternalId { get; set; }
 
         [JsonProperty("cost")]

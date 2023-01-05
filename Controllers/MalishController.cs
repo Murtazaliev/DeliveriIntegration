@@ -40,6 +40,7 @@ namespace Delivery.SelfServiceKioskApi.Controllers
             }
             catch(Exception ex)
             {
+                SentrySdk.CaptureException(ex);
                 return BadRequest(ex);
             }
             
@@ -66,6 +67,7 @@ namespace Delivery.SelfServiceKioskApi.Controllers
             }
             catch(Exception ex)
             {
+                SentrySdk.CaptureException(ex);
                 return BadRequest(ex);
             }
             

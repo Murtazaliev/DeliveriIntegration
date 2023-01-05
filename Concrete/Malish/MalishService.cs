@@ -35,7 +35,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
                 RequestDate = DateTime.Now,
                 IsProcessed = false,
                 IdOrganization = Organisations.MalishId, // Малыш
-                Answer = DecodeToUtf8(answer),
+                Answer = (answer),
             };
             await _dbContext.QueueRequests.AddAsync(request);
             await _dbContext.SaveChangesAsync();
@@ -51,7 +51,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
                 RequestDate = DateTime.Now,
                 IsProcessed = false,
                 IdOrganization = Organisations.MalishId, // Малыш
-                Answer = DecodeToUtf8(answer),
+                Answer = (answer),
             };
             await _dbContext.QueueRequests.AddAsync(request);
             await _dbContext.SaveChangesAsync();
@@ -62,8 +62,8 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
             var categories = _dbContext.QueueRequests
                 .OrderByDescending(n => n.RequestDate)
                 .FirstOrDefault(n =>
-                    n.IdOrganization == Organisations.MalishId && 
-                    n.RequestDate.Date == DateTime.Today.Date && 
+                    n.IdOrganization == Organisations.MalishId &&
+                    n.RequestDate >= DateTime.Today - TimeSpan.FromHours(2) && 
                     n.IsProcessed == false && 
                     n.RequestName == FileNames.MalishFileNames.Kls);
 
@@ -71,7 +71,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
                 .OrderByDescending(n => n.RequestDate)
                 .FirstOrDefault(n =>
                     n.IdOrganization == Organisations.MalishId && 
-                    n.RequestDate.Date == DateTime.Today.Date && 
+                    n.RequestDate >= DateTime.Today - TimeSpan.FromHours(2) && 
                     n.IsProcessed == false && 
                     n.RequestName == FileNames.MalishFileNames.Goods);
 

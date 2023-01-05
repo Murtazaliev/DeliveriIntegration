@@ -6,7 +6,6 @@ namespace Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels
     public class GreenAppleProduct
     {
         [JsonProperty("name_ru")]
-        [JsonPropertyName("name_ru")]
         public string NameRu { get; set; }
 
         [JsonProperty("externalCategoryId")]

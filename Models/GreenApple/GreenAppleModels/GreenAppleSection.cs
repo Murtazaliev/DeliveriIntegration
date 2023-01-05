@@ -6,7 +6,6 @@ namespace Delivery.SelfServiceKioskApi.Models.GreenApple.GreenAppleModels
     public class GreenAppleSection
     {
         [JsonProperty("name")]
-        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         [JsonProperty("externalId")]

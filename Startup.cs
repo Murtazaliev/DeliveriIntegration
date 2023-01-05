@@ -35,7 +35,8 @@ namespace Delivery.SelfServiceKioskApi
         {
             services.AddDbContext<DeliveryKioskApiContext>(opt=>opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddTransient<INomenclatureService, NomenclatureService>();
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddSwaggerGen();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
