@@ -59,11 +59,13 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
 
         public async Task<MalishResponseData> GetNomenclature()
         {
+            var validDate = DateTime.Now - TimeSpan.FromHours(2);
+            
             var categories = _dbContext.QueueRequests
                 .OrderByDescending(n => n.RequestDate)
                 .FirstOrDefault(n =>
                     n.IdOrganization == Organisations.MalishId &&
-                    n.RequestDate >= DateTime.Today - TimeSpan.FromHours(2) && 
+                    n.RequestDate >= (validDate) && 
                     n.IsProcessed == false && 
                     n.RequestName == FileNames.MalishFileNames.Kls);
 
@@ -71,7 +73,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
                 .OrderByDescending(n => n.RequestDate)
                 .FirstOrDefault(n =>
                     n.IdOrganization == Organisations.MalishId && 
-                    n.RequestDate >= DateTime.Today - TimeSpan.FromHours(2) && 
+                    n.RequestDate >= validDate && 
                     n.IsProcessed == false && 
                     n.RequestName == FileNames.MalishFileNames.Goods);
 
