@@ -1,7 +1,9 @@
 using Delivery.SelfServiceKioskApi.Concrete;
 using Delivery.SelfServiceKioskApi.DbModel;
+using Delivery.SelfServiceKioskApi.Infrastructure.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -33,8 +35,12 @@ namespace Delivery.SelfServiceKioskApi
                         o.Debug = true;
                         // Set TracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
                         // We recommend adjusting this value in production.
-                        o.TracesSampleRate = 0.8;
+                        o.TracesSampleRate = 1;
                     });
+                }).ConfigureLogging(builder =>
+                {
+                    builder.Services.AddSingleton<FileLoggerProvider>();
+                    builder.Services.AddSingleton<ILogger, FileLogger>();
                 });
     }
 }

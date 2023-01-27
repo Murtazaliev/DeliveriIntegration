@@ -35,7 +35,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
                 RequestDate = DateTime.Now,
                 IsProcessed = false,
                 IdOrganization = Organisations.MalishId, // Малыш
-                Answer = (answer),
+                Answer = DecodeToUtf8(answer),
             };
             await _dbContext.QueueRequests.AddAsync(request);
             await _dbContext.SaveChangesAsync();
@@ -51,7 +51,7 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
                 RequestDate = DateTime.Now,
                 IsProcessed = false,
                 IdOrganization = Organisations.MalishId, // Малыш
-                Answer = (answer),
+                Answer = DecodeToUtf8(answer),
             };
             await _dbContext.QueueRequests.AddAsync(request);
             await _dbContext.SaveChangesAsync();
@@ -93,11 +93,39 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
             await _dbContext.SaveChangesAsync();
             return nomenclature;
         }
+        
+        public bool AnyNomenclature()
+        {
+            var validDate = DateTime.Now - TimeSpan.FromHours(2);
+            
+            var categories = _dbContext.QueueRequests
+                .OrderByDescending(n => n.RequestDate)
+                .FirstOrDefault(n =>
+                    n.IdOrganization == Organisations.MalishId &&
+                    n.RequestDate >= (validDate) && 
+                    n.IsProcessed == false && 
+                    n.RequestName == FileNames.MalishFileNames.Kls);
+
+            var products = _dbContext.QueueRequests
+                .OrderByDescending(n => n.RequestDate)
+                .FirstOrDefault(n =>
+                    n.IdOrganization == Organisations.MalishId && 
+                    n.RequestDate >= validDate && 
+                    n.IsProcessed == false && 
+                    n.RequestName == FileNames.MalishFileNames.Goods);
+
+            if (string.IsNullOrEmpty(products?.Answer) || string.IsNullOrEmpty(categories?.Answer))
+                return false;            
+            
+            return true;
+        }
 
         private string DecodeToUtf8(string text)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             Encoding utf8 = Encoding.GetEncoding("UTF-8");
-            Encoding win1251 = Encoding.GetEncoding("Windows-1251");
+            Encoding win1251 = Encoding.GetEncoding("windows-1251");
 
             byte[] utf8Bytes = win1251.GetBytes(text);
             byte[] win1251Bytes = Encoding.Convert(utf8, win1251, utf8Bytes);

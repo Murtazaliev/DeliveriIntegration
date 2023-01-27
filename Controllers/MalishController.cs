@@ -46,8 +46,11 @@ namespace Delivery.SelfServiceKioskApi.Controllers
             
             try
             {
-                var nomenclature = await _malishService.GetNomenclature();
-                await _nomenclatureService.UpdateNomenclature(Organisations.MalishId);
+                if (_malishService.AnyNomenclature())
+                {
+                    await _nomenclatureService.UpdateNomenclature(Organisations.MalishId);
+                    await _nomenclatureService.UpdateNomenclature(Organisations.KhasMalishId);
+                }
             }
             catch (Exception ex)
             {
@@ -73,8 +76,11 @@ namespace Delivery.SelfServiceKioskApi.Controllers
             
             try
             {
-                var nomenclature = await _malishService.GetNomenclature();
-                await _nomenclatureService.UpdateNomenclature(Organisations.MalishId);
+                if (_malishService.AnyNomenclature())
+                {
+                    await _nomenclatureService.UpdateNomenclature(Organisations.MalishId);
+                    await _nomenclatureService.UpdateNomenclature(Organisations.KhasMalishId);
+                }
             }
             catch (Exception ex)
             {

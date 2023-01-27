@@ -16,5 +16,9 @@ namespace Delivery.SelfServiceKioskApi.Models.Malish.MalishModels
         [JsonProperty("kls_parent")]
         [JsonPropertyName("kls_parent")]
         public string KlsParent { get; set; }
+        
+        [JsonProperty("flag_del")]
+        [JsonPropertyName("flag_del")]
+        public int FlagDel { get; set; }
     }
 }

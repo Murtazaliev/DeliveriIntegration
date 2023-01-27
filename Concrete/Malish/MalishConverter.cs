@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Delivery.SelfServiceKioskApi.Models.GreenApple;
 using Delivery.SelfServiceKioskApi.Models.Malish;
@@ -35,7 +36,8 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
                     {
                         ExternalId = category.KlsUnicode,
                         CategoryName = category.KlsName,
-                        ExternalParentId = category.KlsParent
+                        ExternalParentId = category.KlsParent,
+                        CategoryIsVisible = !Convert.ToBoolean(category.FlagDel),
                     };
                     productCategories.Add(productCategory);
                 });
