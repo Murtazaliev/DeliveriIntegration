@@ -9,18 +9,19 @@ namespace Delivery.SelfServiceKioskApi.Concrete
     public class NomenclatureService : INomenclatureService
     {
         private readonly IConfiguration _configuration;
-        private readonly RestClient _restClient;
         private readonly string _baseUrl;
+        private RestClient _restClient;
 
         public NomenclatureService(IConfiguration configuration)
         {
             _configuration = configuration;
             _baseUrl = _configuration.GetValue<string>("AdminPanelUrl");
-            _restClient = new RestClient();
         }
 
         public async Task UpdateNomenclature(Guid partnerId)
         {
+            _restClient = new RestClient();
+
             var token = await Login(_configuration.GetValue<string>("AdminPanelLogin"), _configuration.GetValue<string>("AdminPanelPassword"));
             _restClient.AddDefaultHeader("Authorization", $"Bearer {token.Token}");
 
@@ -31,6 +32,8 @@ namespace Delivery.SelfServiceKioskApi.Concrete
 
         public async Task<LoginResponseModel> Login(string login, string password)
         {
+            _restClient = new RestClient();
+
             var request = new RestRequest(_baseUrl + "User/LogIn", Method.POST);
             request.AddJsonBody(new
             {

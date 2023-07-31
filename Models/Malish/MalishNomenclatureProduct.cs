@@ -36,5 +36,9 @@ namespace Delivery.SelfServiceKioskApi.Models.Malish
         [JsonProperty("IsVisible")]
         [JsonPropertyName("IsVisible")]
         public bool IsVisible { get; set; }
+
+        [JsonProperty("ProductImage")]
+        [JsonPropertyName("ProductImage")]
+        public string ProductImage { get; set; }
     }
 }

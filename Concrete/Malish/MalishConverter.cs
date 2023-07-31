@@ -62,7 +62,8 @@ namespace Delivery.SelfServiceKioskApi.Concrete.Malish
                         Cost = product.Price,
                         OldPrice = product.Discount != 0 ? product.Price + product.Discount : 0,
                         Quantity = product.Quantity,
-                        IsVisible = product.Quantity > 0
+                        IsVisible = product.Quantity > 0,
+                        ProductImage = product.ImageName
                     };
                     
                     deliveryProducts.Add(deliveryProduct);

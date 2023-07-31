@@ -40,5 +40,9 @@ namespace Delivery.SelfServiceKioskApi.Models.Malish.MalishModels
         [JsonProperty("quantity")]
         [JsonPropertyName("quantity")]
         public int Quantity { get; set; }
+
+        [JsonProperty("image_name")]
+        [JsonPropertyName("image_name")]
+        public string ImageName{ get; set; }
     }
 }
